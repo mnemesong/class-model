@@ -1,6 +1,6 @@
 import { describe, it } from "mocha"
 import * as assert from "assert"
-import { getAllPropertiesLabels, getPropertyLabel, loadData, property, validationErrors } from "../src"
+import { __classModelPropertiesKey, getAllPropertiesLabels, getPropertyLabel, loadData, property, validationErrors } from "../src"
 
 function strNotEmpty(prop: string, label: string, model: any) {
     return (model[prop].length > 0)
@@ -15,6 +15,13 @@ class UserAuth {
     @property("Password", [strNotEmpty])
     pass: string
 }
+
+describe("uniterable", () => {
+    it("test", () => {
+        const user = new UserAuth()
+        assert.strictEqual(Object.keys(user).includes(__classModelPropertiesKey), false)
+    })
+})
 
 describe("loading", () => {
     it("valid", () => {

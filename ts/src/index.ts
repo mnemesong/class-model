@@ -7,6 +7,9 @@ export type PropertyMeta = {
     label: string|null,
 }
 
+/**
+ * Sets property to model
+ */
 function setProperty(
     _class: any, 
     propName: string|symbol|number, 
@@ -25,6 +28,9 @@ function setProperty(
     }
 }
 
+/**
+ * Gets meta-structure with validators and label of property
+ */
 export function getPropertyMeta(
     _class: any, 
     propName: string
@@ -38,6 +44,9 @@ export function getPropertyMeta(
     return _class[__classModelPropertiesKey][propName]
 }
 
+/**
+ * Get structure kind of {[registeredProperty]: [labelOfProperty]}
+ */
 export function getAllPropertiesLabels(_class: any) {
     const meta = getAllPropertiesMeta(_class)
     const result = {}
@@ -47,6 +56,9 @@ export function getAllPropertiesLabels(_class: any) {
     return result
 }
 
+/**
+ * Gets structure kind of {[registeredProperty]: {label: ..., validators: [...]}}
+ */
 export function getAllPropertiesMeta(
     _class: any
 ): Record<string, PropertyMeta> {
@@ -56,6 +68,9 @@ export function getAllPropertiesMeta(
     return _class[__classModelPropertiesKey]
 }
 
+/**
+ * Decorator factory for defining property
+ */
 export function property(
     label: string|null = null, 
     validators: Array<PropertyValidator>

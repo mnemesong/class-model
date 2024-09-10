@@ -48,6 +48,12 @@ var UserAuth = /** @class */ (function () {
     ], UserAuth.prototype, "pass", void 0);
     return UserAuth;
 }());
+(0, mocha_1.describe)("uniterable", function () {
+    (0, mocha_1.it)("test", function () {
+        var user = new UserAuth();
+        assert.strictEqual(Object.keys(user).includes(src_1.__classModelPropertiesKey), false);
+    });
+});
 (0, mocha_1.describe)("loading", function () {
     (0, mocha_1.it)("valid", function () {
         var user = new UserAuth();

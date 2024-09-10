@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loadData = exports.validationErrors = exports.getPropertyValidators = exports.getPropertyLabel = exports.clearAllValidators = exports.addValidators = exports.property = exports.getAllPropertiesMeta = exports.getAllPropertiesLabels = exports.getPropertyMeta = exports.__classModelPropertiesKey = void 0;
 exports.__classModelPropertiesKey = "__classModelProperties";
+/**
+ * Sets property to model
+ */
 function setProperty(_class, propName, label, validators) {
     if (label === void 0) { label = null; }
     if (validators === void 0) { validators = []; }
@@ -16,6 +19,9 @@ function setProperty(_class, propName, label, validators) {
         label: label
     };
 }
+/**
+ * Gets meta-structure with validators and label of property
+ */
 function getPropertyMeta(_class, propName) {
     if (!_class[exports.__classModelPropertiesKey]) {
         return null;
@@ -26,6 +32,9 @@ function getPropertyMeta(_class, propName) {
     return _class[exports.__classModelPropertiesKey][propName];
 }
 exports.getPropertyMeta = getPropertyMeta;
+/**
+ * Get structure kind of {[registeredProperty]: [labelOfProperty]}
+ */
 function getAllPropertiesLabels(_class) {
     var meta = getAllPropertiesMeta(_class);
     var result = {};
@@ -35,6 +44,9 @@ function getAllPropertiesLabels(_class) {
     return result;
 }
 exports.getAllPropertiesLabels = getAllPropertiesLabels;
+/**
+ * Gets structure kind of {[registeredProperty]: {label: ..., validators: [...]}}
+ */
 function getAllPropertiesMeta(_class) {
     if (!_class[exports.__classModelPropertiesKey] || (typeof _class !== "object")) {
         return {};
@@ -42,6 +54,9 @@ function getAllPropertiesMeta(_class) {
     return _class[exports.__classModelPropertiesKey];
 }
 exports.getAllPropertiesMeta = getAllPropertiesMeta;
+/**
+ * Decorator factory for defining property
+ */
 function property(label, validators) {
     if (label === void 0) { label = null; }
     return function (target, propKey) {
