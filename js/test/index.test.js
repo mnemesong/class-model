@@ -31,7 +31,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mocha_1 = require("mocha");
 var assert = __importStar(require("assert"));
-var src_1 = require("../src");
+var utils_1 = require("../src/utils");
 function strNotEmpty(prop, label, model) {
     return (model[prop].length > 0)
         ? []
@@ -41,23 +41,23 @@ var UserAuth = /** @class */ (function () {
     function UserAuth() {
     }
     __decorate([
-        (0, src_1.property)("Login", [strNotEmpty])
+        (0, utils_1.property)("Login", [strNotEmpty])
     ], UserAuth.prototype, "login", void 0);
     __decorate([
-        (0, src_1.property)("Password", [strNotEmpty])
+        (0, utils_1.property)("Password", [strNotEmpty])
     ], UserAuth.prototype, "pass", void 0);
     return UserAuth;
 }());
 (0, mocha_1.describe)("uniterable", function () {
     (0, mocha_1.it)("test", function () {
         var user = new UserAuth();
-        assert.strictEqual(Object.keys(user).includes(src_1.__classModelPropertiesKey), false);
+        assert.strictEqual(Object.keys(user).includes(utils_1.__classModelPropertiesKey), false);
     });
 });
 (0, mocha_1.describe)("loading", function () {
     (0, mocha_1.it)("valid", function () {
         var user = new UserAuth();
-        var loadResult = (0, src_1.loadData)(user, { login: "asdsa", pass: "c412", koka: 12 });
+        var loadResult = (0, utils_1.loadData)(user, { login: "asdsa", pass: "c412", koka: 12 });
         assert.strictEqual(loadResult, true);
         assert.strictEqual(user.login, "asdsa");
         assert.strictEqual(user.pass, "c412");
@@ -65,7 +65,7 @@ var UserAuth = /** @class */ (function () {
     });
     (0, mocha_1.it)("invalid", function () {
         var user = new UserAuth();
-        var loadResult = (0, src_1.loadData)(user, 15);
+        var loadResult = (0, utils_1.loadData)(user, 15);
         assert.strictEqual(loadResult, false);
     });
 });
@@ -74,14 +74,14 @@ var UserAuth = /** @class */ (function () {
         var user = new UserAuth();
         user.login = "xad12";
         user.pass = "c142s";
-        assert.strictEqual((0, src_1.validationErrors)(user).length, 0);
+        assert.strictEqual((0, utils_1.validationErrors)(user).length, 0);
     });
     (0, mocha_1.it)("invalid", function () {
         var user = new UserAuth();
         user.login = "xad12";
         user.pass = "";
-        assert.strictEqual((0, src_1.validationErrors)(user).length, 1);
-        assert.strictEqual((0, src_1.validationErrors)(user)[0], "Password should be grater then 0");
+        assert.strictEqual((0, utils_1.validationErrors)(user).length, 1);
+        assert.strictEqual((0, utils_1.validationErrors)(user)[0], "Password should be grater then 0");
     });
 });
 (0, mocha_1.describe)("labels", function () {
@@ -89,8 +89,8 @@ var UserAuth = /** @class */ (function () {
         var user = new UserAuth();
         user.login = "xad12";
         user.pass = "c142s";
-        assert.strictEqual((0, src_1.getPropertyLabel)(user, "login"), "Login");
-        assert.deepStrictEqual((0, src_1.getAllPropertiesLabels)(user), {
+        assert.strictEqual((0, utils_1.getPropertyLabel)(user, "login"), "Login");
+        assert.deepStrictEqual((0, utils_1.getAllPropertiesLabels)(user), {
             login: "Login",
             pass: "Password"
         });
@@ -99,6 +99,6 @@ var UserAuth = /** @class */ (function () {
         var user = new UserAuth();
         user.login = "xad12";
         user.pass = "c142s";
-        assert.strictEqual((0, src_1.getPropertyLabel)(user, "name"), "name");
+        assert.strictEqual((0, utils_1.getPropertyLabel)(user, "name"), "name");
     });
 });

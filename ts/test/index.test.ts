@@ -1,6 +1,6 @@
 import { describe, it } from "mocha"
 import * as assert from "assert"
-import { __classModelPropertiesKey, getAllPropertiesLabels, getPropertyLabel,  loadData, property, validationErrors } from "../src"
+import { __classModelPropertiesKey, getAllPropertiesLabels, getPropertyLabel,  loadData, property, validationErrors } from "../src/utils"
 
 function strNotEmpty(prop: string, label: string, model: any) {
     return (model[prop].length > 0)

@@ -1,1 +1,1 @@
-type PropertyValidator = (propName: string, propLabel: string, model: any) => string[]
+export type PropertyValidator = (propName: string, propLabel: string, model: any) => string[]
