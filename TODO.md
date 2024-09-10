@@ -10,7 +10,7 @@
         - arrayUnique
         - arrayEvery
     - common
-        - equals
+        + equals
         - required
         - empty
         - in

@@ -23,8 +23,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validationErrors = exports.loadData = exports.property = exports.utils = void 0;
+exports.validationErrors = exports.loadData = exports.property = exports.validators = exports.utils = void 0;
 exports.utils = __importStar(require("./utils"));
+exports.validators = __importStar(require("./validators"));
 var utils = __importStar(require("./utils"));
 /**
  * Decorator factory for defining property

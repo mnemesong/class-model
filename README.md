@@ -48,10 +48,16 @@ assert.strictDeepEqual(validationErrors2, ["Password should be grater then 0"])
 ### 1. Set decorator to the property
 ```typescript
 class UserAuth {
-    @classModel.property("Login", [strNotEmpty /* custom valdation function */])
+    @classModel.property("Login", [
+        //validator
+        classModel.validators.strictEqual("asdsa")
+    ])
     login: string
 
-    @classModel.property("Password", [strNotEmpty /* custom valdation function */])
+    @classModel.property("Password", [
+        //validator
+        classModel.validators.strictEqual("c412")
+    ])
     pass: string
 }
 ```
@@ -69,7 +75,7 @@ assert.strictEqual(user.pass, "c412")
 ```typescript
 user.password = ""
 const validationErrors2 = classModel.validationErrors(user)
-assert.strictDeepEqual(validationErrors2, ["Password should be grater then 0"])
+assert.strictDeepEqual(validationErrors2, ["Password should be equals \"c412\""])
 ```
 
 ### 4. Use [package].utils functions to access metadata of model
@@ -126,6 +132,37 @@ export declare function getMaybeSpecialConstructor(model: object, propName: stri
  * Returns true if loading had been successfull, false else
  */
 export declare function loadData(model: object, data: any): boolean;
+```
+
+
+## Validators
+Validator is function kind of:
+```typescript
+type PropertyValidator = (propName: string, propLabel: string, model: any) => string[]
+```
+Some popular validators are also prepared for you, and keeps in `classModel.validators`
+module.
+
+#### List of validators:
+```typescript
+//classModel.validators module
+/**
+ * Strict not deep equals to scalar val
+ */
+export declare function strictEquals(
+    val: string | bigint | number | boolean | null | undefined | symbol, 
+    printActualVal?: boolean
+): PropertyValidator;
+
+/**
+ * Deep strict equals validator
+ */
+export declare function strictDeepEquals(
+    val: any, 
+    printActualVal?: boolean, 
+    serialize?: ((v: any) => string) | null
+): PropertyValidator;
+
 ```
 
 
