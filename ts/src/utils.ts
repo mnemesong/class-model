@@ -1,7 +1,8 @@
 import {PropertyValidator} from "./validators"
-type SpecialConstructor = (data: any) => object
 
 export const __classModelPropertiesKey = "__classModelProperties"
+
+export type SpecialConstructor = (data: any) => object
 
 export type PropertyMeta = {
     specialConstructor: SpecialConstructor, 
@@ -9,10 +10,11 @@ export type PropertyMeta = {
     label: string|null,
 }
 
+
 /**
  * Sets property to model
  */
-function setProperty(
+export function setProperty(
     model: object, 
     propName: string|symbol, 
     label: string|null = null,
@@ -73,19 +75,6 @@ export function getAllPropertiesMeta(
 }
 
 /**
- * Decorator factory for defining property
- */
-export function property(
-    label: string|null = null, 
-    validators: Array<PropertyValidator>,
-    specialConstructor: SpecialConstructor|null = null
-): PropertyDecorator {
-    return (target, propKey) => {
-        setProperty(target, propKey, label, validators, specialConstructor)
-    }
-}
-
-/**
  * Get all properties as a string
  */
 export function getProperties(
@@ -131,20 +120,6 @@ export function getPropertyValidators(
 }
 
 /**
- * Validates object by registered validators and returns error messages array
- */
-export function validationErrors(model: object): Array<string> {
-    let result = []
-    const propMetas = getAllPropertiesMeta(model)
-    Object.keys(propMetas).forEach(propName => {
-        propMetas[propName].validators.forEach((v: PropertyValidator) => {
-            result = result.concat(v(propName, getPropertyLabel(model, propName), model)) 
-        })
-    })
-    return result
-}
-
-/**
  * Returns special constructor of property, is it exists
  */
 export function getMaybeSpecialConstructor(
@@ -155,31 +130,4 @@ export function getMaybeSpecialConstructor(
     return (!propMeta || !propMeta.specialConstructor)
         ? null
         : propMeta.specialConstructor
-}
-
-/**
- * Load data from object to model by all registered properties 
- * Returns true if loading had been successfull, false else
- */
-export function loadData(model: object, data: any): boolean {
-    if(typeof data !== "object") {
-        return false
-    }
-    const oldVals = {}
-    try {
-        const meta = getAllPropertiesMeta(model)
-        const props = Object.keys(meta)
-        props.forEach(p => {
-            oldVals[p] = model[p]
-            model[p] = !!meta[p].specialConstructor
-                ? meta[p].specialConstructor(data[p])
-                : data[p]
-        })
-        return true
-    } catch (e) {
-        Object.keys(oldVals).forEach(k => {
-            model[k] = oldVals[k]
-        })
-        return false
-    }
 }

@@ -1,7 +1,7 @@
-1. + Добавить загрузку вложенных структур
-2. + Прееделать any на object
-3.   Написать Readme
-4.   Написать валидаторы
+1. + Add aggregatied structures loading
+2. + Rework type of model from any to object
+3. + Add Readme.md
+4.   Make validators
     - array
         - arrayContains
         - arrayMaxSize
@@ -44,6 +44,6 @@
         - strMaxLength
         - strMinLength
         - strNotContains
-5.   Написать спец. конструкторы
+5.   Make special constructors
     - model
     - arrayOfModels
