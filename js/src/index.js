@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loadData = exports.validationErrors = exports.getPropertyValidators = exports.getPropertyLabel = exports.clearAllValidators = exports.addValidators = exports.property = exports.getAllPropertiesMeta = exports.getAllPropertiesLabels = exports.getPropertyMeta = exports.__classModelPropertiesKey = void 0;
+exports.loadData = exports.validationErrors = exports.getPropertyValidators = exports.getPropertyLabel = exports.getProperties = exports.property = exports.getAllPropertiesMeta = exports.getAllPropertiesLabels = exports.getPropertyMeta = exports.__classModelPropertiesKey = void 0;
 exports.__classModelPropertiesKey = "__classModelProperties";
 /**
  * Sets property to model
@@ -64,25 +64,21 @@ function property(label, validators) {
     };
 }
 exports.property = property;
-function addValidators(_class, propName, validators) {
-    var propMeta = getPropertyMeta(_class, propName);
-    if (!propMeta) {
-        setProperty(_class, propName, null, validators);
-        return;
+/**
+ * Get all properties as a string
+ */
+function getProperties(obj) {
+    var meta = getAllPropertiesMeta(obj);
+    if (!meta || (typeof meta !== "object")) {
+        return [];
     }
-    setProperty(_class, propName, propMeta.label, propMeta.validators.concat(validators));
+    return Object.keys(meta);
 }
-exports.addValidators = addValidators;
-function clearAllValidators(_class) {
-    if (!_class[exports.__classModelPropertiesKey]) {
-        return;
-    }
-    Object.keys(_class[exports.__classModelPropertiesKey])
-        .forEach(function (key) {
-        _class[exports.__classModelPropertiesKey][key].validators = [];
-    });
-}
-exports.clearAllValidators = clearAllValidators;
+exports.getProperties = getProperties;
+/**
+ * Returns label of property or returns property name
+ * if special label had not been registered
+ */
 function getPropertyLabel(_class, propName) {
     var propMeta = getPropertyMeta(_class, propName);
     var label = (!propMeta || !propMeta["label"])
@@ -93,13 +89,19 @@ function getPropertyLabel(_class, propName) {
         : propName;
 }
 exports.getPropertyLabel = getPropertyLabel;
+/**
+ * Returns all geristered validators of the property
+ */
 function getPropertyValidators(_class, propName) {
     var propMeta = getPropertyMeta(_class, propName);
-    return (!propMeta || !propMeta[propName] || !propMeta[propName]["validators"])
+    return (!propMeta || !propMeta["validators"])
         ? []
-        : propMeta[propName]["validators"];
+        : propMeta["validators"];
 }
 exports.getPropertyValidators = getPropertyValidators;
+/**
+ * Validates object by registered validators and returns error messages array
+ */
 function validationErrors(model) {
     var result = [];
     var propMetas = getAllPropertiesMeta(model);
@@ -111,6 +113,10 @@ function validationErrors(model) {
     return result;
 }
 exports.validationErrors = validationErrors;
+/**
+ * Load data from object to model by all registered properties
+ * Returns true if loading had been successfull, false else
+ */
 function loadData(model, data) {
     if (typeof data !== "object") {
         return false;

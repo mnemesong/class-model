@@ -80,36 +80,23 @@ export function property(
     }
 }
 
-export function addValidators(
-    _class: any, 
-    propName: string, 
-    validators: Array<PropertyValidator>
-) {
-    const propMeta = getPropertyMeta(_class, propName)
-    if(!propMeta) {
-        setProperty(_class, propName, null, validators)
-        return
+/**
+ * Get all properties as a string
+ */
+export function getProperties(
+    obj: object,
+): Array<string> {
+    const meta = getAllPropertiesMeta(obj)
+    if(!meta || (typeof meta !== "object")) {
+        return []
     }
-    setProperty(
-        _class, 
-        propName, 
-        propMeta.label, 
-        propMeta.validators.concat(validators)
-    )
+    return Object.keys(meta)
 }
 
-export function clearAllValidators(
-    _class: any
-) {
-    if(!_class[__classModelPropertiesKey]) {
-        return
-    }
-    Object.keys(_class[__classModelPropertiesKey])
-        .forEach((key) => {
-            _class[__classModelPropertiesKey][key].validators = []
-        })
-}
-
+/**
+ * Returns label of property or returns property name 
+ * if special label had not been registered
+ */
 export function getPropertyLabel(
     _class: any, 
     propName: string
@@ -123,16 +110,22 @@ export function getPropertyLabel(
         : propName
 }
 
+/**
+ * Returns all geristered validators of the property
+ */
 export function getPropertyValidators(
     _class: any, 
     propName: string
 ): PropertyValidator[] {
     const propMeta = getPropertyMeta(_class, propName)
-    return (!propMeta || !propMeta[propName] || !propMeta[propName]["validators"])
+    return (!propMeta || !propMeta["validators"])
         ? []
-        : propMeta[propName]["validators"]
+        : propMeta["validators"]
 }
 
+/**
+ * Validates object by registered validators and returns error messages array
+ */
 export function validationErrors(model: any): Array<string> {
     let result = []
     const propMetas = getAllPropertiesMeta(model)
@@ -144,6 +137,10 @@ export function validationErrors(model: any): Array<string> {
     return result
 }
 
+/**
+ * Load data from object to model by all registered properties 
+ * Returns true if loading had been successfull, false else
+ */
 export function loadData(model: any, data: any): boolean {
     if(typeof data !== "object") {
         return false

@@ -20,10 +20,26 @@ export declare function getAllPropertiesMeta(_class: any): Record<string, Proper
  * Decorator factory for defining property
  */
 export declare function property(label: string | null, validators: Array<PropertyValidator>): PropertyDecorator;
-export declare function addValidators(_class: any, propName: string, validators: Array<PropertyValidator>): void;
-export declare function clearAllValidators(_class: any): void;
+/**
+ * Get all properties as a string
+ */
+export declare function getProperties(obj: object): Array<string>;
+/**
+ * Returns label of property or returns property name
+ * if special label had not been registered
+ */
 export declare function getPropertyLabel(_class: any, propName: string): string;
+/**
+ * Returns all geristered validators of the property
+ */
 export declare function getPropertyValidators(_class: any, propName: string): PropertyValidator[];
+/**
+ * Validates object by registered validators and returns error messages array
+ */
 export declare function validationErrors(model: any): Array<string>;
+/**
+ * Load data from object to model by all registered properties
+ * Returns true if loading had been successfull, false else
+ */
 export declare function loadData(model: any, data: any): boolean;
 export {};
