@@ -1,0 +1,20 @@
+{
+  "name": "class-model",
+  "version": "0.0.1",
+  "description": "Class scheme definition by decorator with type-validators and loaders",
+  "main": "js/src/index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "test": "mocha ./js/test/**/*.test.js"
+  },
+  "keywords": [],
+  "author": "Anatoly Starodubtsev",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/mocha": "^9.*",
+    "@types/node": "^13.*",
+    "class-validator": "^0.14.1",
+    "mocha": "^9.*",
+    "typescript": "^4.9.4"
+  }
+}
