@@ -1,9 +1,9 @@
 export * as utils from "./utils"
-export * as validators from "./validators"
+export * as valid from "./valid"
 export * as make from "./make"
 
 import * as utils from "./utils"
-import { PropertyValidator } from "./validators"
+import { PropertyValidator } from "./valid"
 import * as make from "./make"
 
 /**

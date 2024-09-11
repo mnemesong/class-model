@@ -1,5 +1,5 @@
 import { MakeModel } from "./make";
-import { PropertyValidator } from "./validators";
+import { PropertyValidator } from "./valid";
 export declare const __classModelPropertiesKey = "__classModelProperties";
 export type PropertyMeta = {
     makeModel: MakeModel;

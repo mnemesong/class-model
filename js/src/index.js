@@ -23,9 +23,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validationErrors = exports.loadData = exports.property = exports.make = exports.validators = exports.utils = void 0;
+exports.validationErrors = exports.loadData = exports.property = exports.make = exports.valid = exports.utils = void 0;
 exports.utils = __importStar(require("./utils"));
-exports.validators = __importStar(require("./validators"));
+exports.valid = __importStar(require("./valid"));
 exports.make = __importStar(require("./make"));
 var utils = __importStar(require("./utils"));
 /**

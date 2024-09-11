@@ -9,11 +9,12 @@
         - arrayNotContains
         - arrayUnique
         - arrayEvery
-    - common
+        - arrayCount
+    + common
         + equals
-        - required
-        - empty
-        - in
+        + required
+        + empty
+        + in
     - modifiers
         - and
         - or
