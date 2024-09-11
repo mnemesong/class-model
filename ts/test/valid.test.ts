@@ -173,25 +173,74 @@ describe("arrayOf", () => {
     })
 })
 
-class ArrayDeepStrickUniqueCheckClass {
+class ArrayDeepStrictUniqueCheckClass {
     @property("A", [valid.arrayDeepStrictUnique((v) => JSON.stringify(v))])
     public a: any
 }
 
 describe("arrayDeepStrictUnique", () => {
     it("valid", () => {
-        const obj = new ArrayDeepStrickUniqueCheckClass()
+        const obj = new ArrayDeepStrictUniqueCheckClass()
         obj.a = ["!!!!!", 42, [], 15]
         const validErrors = validationErrors(obj)
         assert.deepStrictEqual(validErrors, [])
     })
 
     it("invalid", () => {
-        const obj = new ArrayDeepStrickUniqueCheckClass()
+        const obj = new ArrayDeepStrictUniqueCheckClass()
         obj.a = ["!!!!!", 42, [], []]
         const validErrors = validationErrors(obj)
         assert.deepStrictEqual(validErrors, [
             "A should be array of unique values. Found not unique element: []"
+        ])
+    })
+})
+
+class ArrayCountCheckClass {
+    @property("A", [valid.arrayCount((n) => n === 3)])
+    public a: any
+}
+
+describe("arrayCount", () => {
+    it("valid", () => {
+        const obj = new ArrayCountCheckClass()
+        obj.a = ["!!!!!", 42, []]
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid", () => {
+        const obj = new ArrayCountCheckClass()
+        obj.a = ["!!!!!", 42, [], []]
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A contains array invalid count of items: 4"
+        ])
+    })
+})
+
+class ArrayTupleCheckClass {
+    @property("A", [valid.arrayTuple([
+        valid.strictDeepEqual(12),
+        valid.scalar()
+    ])])
+    public a: any
+}
+
+describe("arrayTuple", () => {
+    it("valid", () => {
+        const obj = new ArrayTupleCheckClass()
+        obj.a = [12, Symbol("my symbol")]
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid", () => {
+        const obj = new ArrayTupleCheckClass()
+        obj.a = [12, {}]
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "In property A tuple: item of A should be scalar, but it instance of object:Object"
         ])
     })
 })

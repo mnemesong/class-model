@@ -211,27 +211,78 @@ var ArrayOfCheckClass = /** @class */ (function () {
         ]);
     });
 });
-var ArrayDeepStrickUniqueCheckClass = /** @class */ (function () {
-    function ArrayDeepStrickUniqueCheckClass() {
+var ArrayDeepStrictUniqueCheckClass = /** @class */ (function () {
+    function ArrayDeepStrictUniqueCheckClass() {
     }
     __decorate([
         (0, src_1.property)("A", [valid.arrayDeepStrictUnique(function (v) { return JSON.stringify(v); })])
-    ], ArrayDeepStrickUniqueCheckClass.prototype, "a", void 0);
-    return ArrayDeepStrickUniqueCheckClass;
+    ], ArrayDeepStrictUniqueCheckClass.prototype, "a", void 0);
+    return ArrayDeepStrictUniqueCheckClass;
 }());
 (0, mocha_1.describe)("arrayDeepStrictUnique", function () {
     (0, mocha_1.it)("valid", function () {
-        var obj = new ArrayDeepStrickUniqueCheckClass();
+        var obj = new ArrayDeepStrictUniqueCheckClass();
         obj.a = ["!!!!!", 42, [], 15];
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, []);
     });
     (0, mocha_1.it)("invalid", function () {
-        var obj = new ArrayDeepStrickUniqueCheckClass();
+        var obj = new ArrayDeepStrictUniqueCheckClass();
         obj.a = ["!!!!!", 42, [], []];
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
             "A should be array of unique values. Found not unique element: []"
+        ]);
+    });
+});
+var ArrayCountCheckClass = /** @class */ (function () {
+    function ArrayCountCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", [valid.arrayCount(function (n) { return n === 3; })])
+    ], ArrayCountCheckClass.prototype, "a", void 0);
+    return ArrayCountCheckClass;
+}());
+(0, mocha_1.describe)("arrayCount", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new ArrayCountCheckClass();
+        obj.a = ["!!!!!", 42, []];
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid", function () {
+        var obj = new ArrayCountCheckClass();
+        obj.a = ["!!!!!", 42, [], []];
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A contains array invalid count of items: 4"
+        ]);
+    });
+});
+var ArrayTupleCheckClass = /** @class */ (function () {
+    function ArrayTupleCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", [valid.arrayTuple([
+                valid.strictDeepEqual(12),
+                valid.scalar()
+            ])])
+    ], ArrayTupleCheckClass.prototype, "a", void 0);
+    return ArrayTupleCheckClass;
+}());
+(0, mocha_1.describe)("arrayTuple", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new ArrayTupleCheckClass();
+        obj.a = [12, Symbol("my symbol")];
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid", function () {
+        var obj = new ArrayTupleCheckClass();
+        obj.a = [12, {}];
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "In property A tuple: item of A should be scalar, but it instance of object:Object"
         ]);
     });
 });

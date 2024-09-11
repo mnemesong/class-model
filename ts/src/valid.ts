@@ -102,7 +102,7 @@ export function any(): PropertyValidator {
 
 /**
  * Checks is value type of bigint, symbol, number, string,
- * boolean, null or undefined
+ * boolean or undefined
  */
 export function scalar(): PropertyValidator {
     return function(propName, propLabel, propVal) {
@@ -113,14 +113,15 @@ export function scalar(): PropertyValidator {
             "number", 
             "string", 
             "boolean", 
-            "null", 
             "undefined"
         ].includes(typeofPropVal))
             ? []
             : [propLabel + " should be scalar, but it instance of " + (typeofPropVal)
                 + (typeofPropVal !== "object" 
                     ? ""
-                    : ((!propVal["constructor"] || !propVal["constructor"]["name"])
+                    : (((propVal === null) 
+                        || !propVal["constructor"] 
+                        || !propVal["constructor"]["name"])
                         ? ""
                         : (":" + propVal["constructor"]["name"])))
                 + (typeofPropVal !== "function" 
@@ -182,3 +183,39 @@ export function arrayOf(
                 + ((printVal === null) ? "" : (": " + printVal(filtered)))];
     }
 }
+
+/**
+ * Checks array count by function
+ */
+export function arrayCount(
+    countCheckFn: ((n: number) => boolean)
+ ): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(!Array.isArray(propVal)) {
+            return ["Property " + propLabel + " should be array, gets "
+            + (typeof propVal)]
+        }
+        const arrayCount = propVal.length
+        return (countCheckFn(arrayCount))
+            ? []
+            : [propLabel + " contains array invalid count of items: " + arrayCount];
+    }
+ }
+
+ /**
+  * Checks property is a tuple match tuple of validators
+  */
+ export function arrayTuple(
+    valids: PropertyValidator[]
+ ): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(!Array.isArray(propVal)) {
+            return ["Property " + propLabel + " should be array, gets "
+            + (typeof propVal)]
+        }
+        return valids.reduce((acc, el, i) => {
+            return acc.concat(el(propName, "item of " + propLabel, propVal[i]))
+        }, [])
+            .map(err => "In property A tuple: " + err)
+    }
+ }

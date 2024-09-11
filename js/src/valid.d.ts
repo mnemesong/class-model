@@ -30,7 +30,7 @@ export declare function any(): PropertyValidator;
 export declare function never(): PropertyValidator;
 /**
  * Checks is value type of bigint, symbol, number, string,
- * boolean, null or undefined
+ * boolean or undefined
  */
 export declare function scalar(): PropertyValidator;
 /**
@@ -41,3 +41,11 @@ export declare function arrayOf(itemValidator: PropertyValidator): PropertyValid
  * Checks is property value is array have n of X values
  */
 export declare function arrayDeepStrictUnique(printVal?: ValuePrinter | null): PropertyValidator;
+/**
+ * Checks array count by function
+ */
+export declare function arrayCount(countCheckFn: ((n: number) => boolean)): PropertyValidator;
+/**
+ * Checks property is a tuple match tuple of validators
+ */
+export declare function arrayTuple(valids: PropertyValidator[]): PropertyValidator;

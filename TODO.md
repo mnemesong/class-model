@@ -2,10 +2,11 @@
 2. + Rework type of model from any to object
 3. + Add Readme.md
 4.   Make validators
-    - array
+    + array
         + arrayUnique
         + arrayOf
-        - arrayCount
+        + arrayCount
+        + arrayTuple
     + common
         + equals
         + required

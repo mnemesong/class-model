@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
+exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
 var util_1 = require("util");
 /**
  * Strict not deep equals to scalar val
@@ -93,7 +93,7 @@ function never() {
 exports.never = never;
 /**
  * Checks is value type of bigint, symbol, number, string,
- * boolean, null or undefined
+ * boolean or undefined
  */
 function scalar() {
     return function (propName, propLabel, propVal) {
@@ -104,14 +104,15 @@ function scalar() {
             "number",
             "string",
             "boolean",
-            "null",
             "undefined"
         ].includes(typeofPropVal))
             ? []
             : [propLabel + " should be scalar, but it instance of " + (typeofPropVal)
                     + (typeofPropVal !== "object"
                         ? ""
-                        : ((!propVal["constructor"] || !propVal["constructor"]["name"])
+                        : (((propVal === null)
+                            || !propVal["constructor"]
+                            || !propVal["constructor"]["name"])
                             ? ""
                             : (":" + propVal["constructor"]["name"])))
                     + (typeofPropVal !== "function"
@@ -171,3 +172,35 @@ function arrayDeepStrictUnique(printVal) {
     };
 }
 exports.arrayDeepStrictUnique = arrayDeepStrictUnique;
+/**
+ * Checks array count by function
+ */
+function arrayCount(countCheckFn) {
+    return function (propName, propLabel, propVal) {
+        if (!Array.isArray(propVal)) {
+            return ["Property " + propLabel + " should be array, gets "
+                    + (typeof propVal)];
+        }
+        var arrayCount = propVal.length;
+        return (countCheckFn(arrayCount))
+            ? []
+            : [propLabel + " contains array invalid count of items: " + arrayCount];
+    };
+}
+exports.arrayCount = arrayCount;
+/**
+ * Checks property is a tuple match tuple of validators
+ */
+function arrayTuple(valids) {
+    return function (propName, propLabel, propVal) {
+        if (!Array.isArray(propVal)) {
+            return ["Property " + propLabel + " should be array, gets "
+                    + (typeof propVal)];
+        }
+        return valids.reduce(function (acc, el, i) {
+            return acc.concat(el(propName, "item of " + propLabel, propVal[i]));
+        }, [])
+            .map(function (err) { return "In property A tuple: " + err; });
+    };
+}
+exports.arrayTuple = arrayTuple;
