@@ -1,8 +1,10 @@
 export * as utils from "./utils"
 export * as validators from "./validators"
+export * as make from "./make"
 
 import * as utils from "./utils"
 import { PropertyValidator } from "./validators"
+import * as make from "./make"
 
 /**
  * Decorator factory for defining property
@@ -10,10 +12,10 @@ import { PropertyValidator } from "./validators"
  export function property(
     label: string|null = null, 
     validators: Array<PropertyValidator>,
-    specialConstructor: utils.SpecialConstructor|null = null
+    makeModel: make.MakeModel|null = null
 ): PropertyDecorator {
     return (target, propKey) => {
-        utils.setProperty(target, propKey, label, validators, specialConstructor)
+        utils.setProperty(target, propKey, label, validators, makeModel)
     }
 }
 
@@ -31,8 +33,13 @@ import { PropertyValidator } from "./validators"
         const props = Object.keys(meta)
         props.forEach(p => {
             oldVals[p] = model[p]
-            model[p] = !!meta[p].specialConstructor
-                ? meta[p].specialConstructor(data[p])
+            model[p] = !!meta[p].makeModel
+                ? (() => {
+                    const maked = meta[p].makeModel(data[p])
+                    return (maked === false)
+                        ? data[p]
+                        : maked
+                })()
                 : data[p]
         })
         return true

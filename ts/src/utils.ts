@@ -1,11 +1,10 @@
+import { MakeModel } from "./make"
 import {PropertyValidator} from "./validators"
 
 export const __classModelPropertiesKey = "__classModelProperties"
 
-export type SpecialConstructor = (data: any) => object
-
 export type PropertyMeta = {
-    specialConstructor: SpecialConstructor, 
+    makeModel: MakeModel, 
     validators: Array<PropertyValidator>,
     label: string|null,
 }
@@ -19,7 +18,7 @@ export function setProperty(
     propName: string|symbol, 
     label: string|null = null,
     validators: Array<PropertyValidator> = [],
-    specialConstructor: SpecialConstructor|null = null
+    makeModel: MakeModel|null = null
 ): void {
     if(!model[__classModelPropertiesKey]) {
         Object.defineProperty(model, __classModelPropertiesKey, {
@@ -30,7 +29,7 @@ export function setProperty(
     model[__classModelPropertiesKey][propName] = {
         validators: validators, 
         label: label,
-        specialConstructor: specialConstructor,
+        makeModel: makeModel,
     }
 }
 
@@ -122,12 +121,12 @@ export function getPropertyValidators(
 /**
  * Returns special constructor of property, is it exists
  */
-export function getMaybeSpecialConstructor(
+export function getMaybeMakeModelFn(
     model: object, 
     propName: string|symbol
-): null|SpecialConstructor {
+): null|MakeModel {
     const propMeta = getPropertyMeta(model, propName)
-    return (!propMeta || !propMeta.specialConstructor)
+    return (!propMeta || !propMeta.makeModel)
         ? null
-        : propMeta.specialConstructor
+        : propMeta.makeModel
 }

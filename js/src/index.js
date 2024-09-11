@@ -23,18 +23,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validationErrors = exports.loadData = exports.property = exports.validators = exports.utils = void 0;
+exports.validationErrors = exports.loadData = exports.property = exports.make = exports.validators = exports.utils = void 0;
 exports.utils = __importStar(require("./utils"));
 exports.validators = __importStar(require("./validators"));
+exports.make = __importStar(require("./make"));
 var utils = __importStar(require("./utils"));
 /**
  * Decorator factory for defining property
  */
-function property(label, validators, specialConstructor) {
+function property(label, validators, makeModel) {
     if (label === void 0) { label = null; }
-    if (specialConstructor === void 0) { specialConstructor = null; }
+    if (makeModel === void 0) { makeModel = null; }
     return function (target, propKey) {
-        utils.setProperty(target, propKey, label, validators, specialConstructor);
+        utils.setProperty(target, propKey, label, validators, makeModel);
     };
 }
 exports.property = property;
@@ -52,8 +53,13 @@ function loadData(model, data) {
         var props = Object.keys(meta_1);
         props.forEach(function (p) {
             oldVals[p] = model[p];
-            model[p] = !!meta_1[p].specialConstructor
-                ? meta_1[p].specialConstructor(data[p])
+            model[p] = !!meta_1[p].makeModel
+                ? (function () {
+                    var maked = meta_1[p].makeModel(data[p]);
+                    return (maked === false)
+                        ? data[p]
+                        : maked;
+                })()
                 : data[p];
         });
         return true;

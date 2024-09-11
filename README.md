@@ -166,6 +166,49 @@ export declare function strictDeepEquals(
 ```
 
 
+## Special property constructors
+If you want to load aggregated data or define special property construction logic
+on loading, you should define special constructor in property decorator
+
+```typescript
+class SubModel {
+    @classModel.property("A", [])
+    a: number = 12
+}
+
+class MakeModelTestClass {
+    @classModel.property("As", [], 
+        classModel.make.model(() => new SubModel()) /*special property constructor*/)
+    public as: SubModel //aggreagated property
+}
+
+const obj = new MakeModelTestClass()
+const data = {as: {a: 15}}
+const loadResult = classModel.loadData(obj, data)
+assert.strictEqual(loadResult, true)
+assert.strictEqual(obj.as.a, 15)
+```
+
+
+#### Special decorators
+We prepared two popular constructors in `classModel.make` module:
+```typescript
+// classModel.make module
+
+export type MakeModel = (data: any) => any;
+
+/**
+ * Load model uses getter
+ */
+export declare function model(getModel: () => object): MakeModel;
+
+/**
+ * Load array of models uses getter
+ */
+export declare function modelsArray(getModel: () => object): MakeModel;
+```
+
+
 ## Author
 Anatoly Starodubtsev
 tostar74@mail.ru

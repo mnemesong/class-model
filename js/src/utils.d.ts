@@ -1,15 +1,15 @@
+import { MakeModel } from "./make";
 import { PropertyValidator } from "./validators";
 export declare const __classModelPropertiesKey = "__classModelProperties";
-export type SpecialConstructor = (data: any) => object;
 export type PropertyMeta = {
-    specialConstructor: SpecialConstructor;
+    makeModel: MakeModel;
     validators: Array<PropertyValidator>;
     label: string | null;
 };
 /**
  * Sets property to model
  */
-export declare function setProperty(model: object, propName: string | symbol, label?: string | null, validators?: Array<PropertyValidator>, specialConstructor?: SpecialConstructor | null): void;
+export declare function setProperty(model: object, propName: string | symbol, label?: string | null, validators?: Array<PropertyValidator>, makeModel?: MakeModel | null): void;
 /**
  * Gets meta-structure with validators and label of property
  */
@@ -38,4 +38,4 @@ export declare function getPropertyValidators(model: object, propName: string | 
 /**
  * Returns special constructor of property, is it exists
  */
-export declare function getMaybeSpecialConstructor(model: object, propName: string | symbol): null | SpecialConstructor;
+export declare function getMaybeMakeModelFn(model: object, propName: string | symbol): null | MakeModel;

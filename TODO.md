@@ -44,6 +44,6 @@
         - strMaxLength
         - strMinLength
         - strNotContains
-5.   Make special constructors
-    - model
-    - arrayOfModels
+5. + Make special constructors
+    + model
+    + arrayOfModels

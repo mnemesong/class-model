@@ -1,0 +1,34 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.modelsArray = exports.model = void 0;
+var _1 = require(".");
+/**
+ * Load model uses getter
+ */
+function model(getModel) {
+    return function (data) {
+        if (typeof data !== "object") {
+            throw new Error("Cannot load not object data to model");
+        }
+        var obj = getModel();
+        var loaded = (0, _1.loadData)(obj, data);
+        if (loaded === false) {
+            throw new Error("Error on loading model property");
+        }
+        return obj;
+    };
+}
+exports.model = model;
+/**
+ * Load array of models uses getter
+ */
+function modelsArray(getModel) {
+    return function (data) {
+        if (!Array.isArray(data)) {
+            throw new Error("try to load models array by not array of data");
+        }
+        var loader = model(getModel);
+        return data.map(function (v) { return loader(v); });
+    };
+}
+exports.modelsArray = modelsArray;

@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMaybeSpecialConstructor = exports.getPropertyValidators = exports.getPropertyLabel = exports.getProperties = exports.getAllPropertiesMeta = exports.getAllPropertiesLabels = exports.getPropertyMeta = exports.setProperty = exports.__classModelPropertiesKey = void 0;
+exports.getMaybeMakeModelFn = exports.getPropertyValidators = exports.getPropertyLabel = exports.getProperties = exports.getAllPropertiesMeta = exports.getAllPropertiesLabels = exports.getPropertyMeta = exports.setProperty = exports.__classModelPropertiesKey = void 0;
 exports.__classModelPropertiesKey = "__classModelProperties";
 /**
  * Sets property to model
  */
-function setProperty(model, propName, label, validators, specialConstructor) {
+function setProperty(model, propName, label, validators, makeModel) {
     if (label === void 0) { label = null; }
     if (validators === void 0) { validators = []; }
-    if (specialConstructor === void 0) { specialConstructor = null; }
+    if (makeModel === void 0) { makeModel = null; }
     if (!model[exports.__classModelPropertiesKey]) {
         Object.defineProperty(model, exports.__classModelPropertiesKey, {
             value: {},
@@ -18,7 +18,7 @@ function setProperty(model, propName, label, validators, specialConstructor) {
     model[exports.__classModelPropertiesKey][propName] = {
         validators: validators,
         label: label,
-        specialConstructor: specialConstructor,
+        makeModel: makeModel,
     };
 }
 exports.setProperty = setProperty;
@@ -97,10 +97,10 @@ exports.getPropertyValidators = getPropertyValidators;
 /**
  * Returns special constructor of property, is it exists
  */
-function getMaybeSpecialConstructor(model, propName) {
+function getMaybeMakeModelFn(model, propName) {
     var propMeta = getPropertyMeta(model, propName);
-    return (!propMeta || !propMeta.specialConstructor)
+    return (!propMeta || !propMeta.makeModel)
         ? null
-        : propMeta.specialConstructor;
+        : propMeta.makeModel;
 }
-exports.getMaybeSpecialConstructor = getMaybeSpecialConstructor;
+exports.getMaybeMakeModelFn = getMaybeMakeModelFn;
