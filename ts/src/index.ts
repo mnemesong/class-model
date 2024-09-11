@@ -12,7 +12,7 @@ import * as make from "./make"
  export function property(
     label: string|null = null, 
     validators: Array<PropertyValidator>,
-    makeModel: make.MakeModel|null = null
+    makeModel: make.MakeProperty|null = null
 ): PropertyDecorator {
     return (target, propKey) => {
         utils.setProperty(target, propKey, label, validators, makeModel)
@@ -59,7 +59,7 @@ import * as make from "./make"
     const propMetas = utils.getAllPropertiesMeta(model)
     Object.keys(propMetas).forEach(propName => {
         propMetas[propName].validators.forEach((v: PropertyValidator) => {
-            result = result.concat(v(propName, utils.getPropertyLabel(model, propName), model)) 
+            result = result.concat(v(propName, utils.getPropertyLabel(model, propName), model[propName])) 
         })
     })
     return result

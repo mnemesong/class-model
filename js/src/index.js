@@ -80,7 +80,7 @@ function validationErrors(model) {
     var propMetas = utils.getAllPropertiesMeta(model);
     Object.keys(propMetas).forEach(function (propName) {
         propMetas[propName].validators.forEach(function (v) {
-            result = result.concat(v(propName, utils.getPropertyLabel(model, propName), model));
+            result = result.concat(v(propName, utils.getPropertyLabel(model, propName), model[propName]));
         });
     });
     return result;

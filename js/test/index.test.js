@@ -33,8 +33,8 @@ var mocha_1 = require("mocha");
 var assert = __importStar(require("assert"));
 var utils_1 = require("../src/utils");
 var src_1 = require("../src");
-function strNotEmpty(prop, label, model) {
-    return (model[prop].length > 0)
+function strNotEmpty(prop, label, val) {
+    return (val.length > 0)
         ? []
         : ([label + " should be grater then 0"]);
 }

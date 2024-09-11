@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.modelsArray = exports.model = void 0;
+exports.bigInt = exports.modelsArray = exports.model = void 0;
 var _1 = require(".");
 /**
  * Load model uses getter
@@ -32,3 +32,15 @@ function modelsArray(getModel) {
     };
 }
 exports.modelsArray = modelsArray;
+/**
+ * Load bigint
+ */
+function bigInt() {
+    return function (data) {
+        if (!["bigint", "number", "string", "boolean"].includes(typeof data)) {
+            throw new Error("Try to construct bigint from invalid data value");
+        }
+        return BigInt(data);
+    };
+}
+exports.bigInt = bigInt;

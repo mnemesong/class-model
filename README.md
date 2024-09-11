@@ -50,13 +50,13 @@ assert.strictDeepEqual(validationErrors2, ["Password should be grater then 0"])
 class UserAuth {
     @classModel.property("Login", [
         //validator
-        classModel.validators.strictEqual("asdsa")
+        classModel.valid.strictEqual("asdsa")
     ])
     login: string
 
     @classModel.property("Password", [
         //validator
-        classModel.validators.strictEqual("c412")
+        classModel.valid.strictEqual("c412")
     ])
     pass: string
 }
@@ -138,14 +138,14 @@ export declare function loadData(model: object, data: any): boolean;
 ## Validators
 Validator is function kind of:
 ```typescript
-type PropertyValidator = (propName: string, propLabel: string, model: any) => string[]
+type PropertyValidator = (propName: string, propLabel: string, propVal: any) => string[]
 ```
-Some popular validators are also prepared for you, and keeps in `classModel.validators`
+Some popular validators are also prepared for you, and keeps in `classModel.valid`
 module.
 
 #### List of validators:
 ```typescript
-//classModel.validators module
+//classModel.valid module
 /**
  * Strict not deep equals to scalar val
  */
@@ -190,22 +190,28 @@ assert.strictEqual(obj.as.a, 15)
 ```
 
 
-#### Special decorators
+#### Special property constructors
 We prepared two popular constructors in `classModel.make` module:
 ```typescript
 // classModel.make module
 
-export type MakeModel = (data: any) => any;
+export type MakeProperty = (data: any) => any;
 
 /**
  * Load model uses getter
  */
-export declare function model(getModel: () => object): MakeModel;
+export declare function model(getModel: () => object): MakeProperty;
 
 /**
  * Load array of models uses getter
  */
-export declare function modelsArray(getModel: () => object): MakeModel;
+export declare function modelsArray(getModel: () => object): MakeProperty;
+
+/**
+ * Load bigint
+ */
+export declare function bigInt(): MakeProperty;
+
 ```
 
 

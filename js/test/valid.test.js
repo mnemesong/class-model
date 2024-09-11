@@ -154,3 +154,60 @@ var OneOfCheckClass = /** @class */ (function () {
         ]);
     });
 });
+var ScalarCheckClass = /** @class */ (function () {
+    function ScalarCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", [valid.scalar()])
+    ], ScalarCheckClass.prototype, "a", void 0);
+    return ScalarCheckClass;
+}());
+(0, mocha_1.describe)("scalar", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new ScalarCheckClass();
+        obj.a = "1984";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid", function () {
+        var obj = new ScalarCheckClass();
+        obj.a = [];
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A should be scalar, but it instance of object:Array"
+        ]);
+    });
+});
+var ArrayOfCheckClass = /** @class */ (function () {
+    function ArrayOfCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", [valid.arrayOf(valid.strictEqual("aaa"))])
+    ], ArrayOfCheckClass.prototype, "a", void 0);
+    return ArrayOfCheckClass;
+}());
+(0, mocha_1.describe)("arrayOf", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new ArrayOfCheckClass();
+        obj.a = ["aaa", "aaa", "aaa"];
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid 1", function () {
+        var obj = new ArrayOfCheckClass();
+        obj.a = ["aaa", "aaa", "bbb"];
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "One or more elements in array fail validation:"
+                + " item of A should be equals to \"aaa\""
+        ]);
+    });
+    (0, mocha_1.it)("invalid 2", function () {
+        var obj = new ArrayOfCheckClass();
+        obj.a = "aaa";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "Property A should be array, gets string"
+        ]);
+    });
+});

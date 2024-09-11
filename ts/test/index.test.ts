@@ -3,8 +3,8 @@ import * as assert from "assert"
 import { __classModelPropertiesKey, getAllPropertiesLabels, getPropertyLabel } from "../src/utils"
 import { property, loadData, validationErrors } from "../src"
 
-function strNotEmpty(prop: string, label: string, model: any) {
-    return (model[prop].length > 0)
+function strNotEmpty(prop: string, label: string, val: any) {
+    return (val.length > 0)
             ? []
             : ([label + " should be grater then 0"])
 }

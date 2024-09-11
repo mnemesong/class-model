@@ -8,13 +8,16 @@
         - arrayMinSize
         - arrayNotContains
         - arrayUnique
-        - arrayEvery
+        + arrayOf
         - arrayCount
     + common
         + equals
         + required
         + empty
         + in
+        + scalar
+        + never
+        + any
     - modifiers
         - and
         - or
@@ -48,3 +51,4 @@
 5. + Make special constructors
     + model
     + arrayOfModels
+    + bigint

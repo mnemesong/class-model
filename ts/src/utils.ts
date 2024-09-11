@@ -1,10 +1,10 @@
-import { MakeModel } from "./make"
+import { MakeProperty } from "./make"
 import {PropertyValidator} from "./valid"
 
 export const __classModelPropertiesKey = "__classModelProperties"
 
 export type PropertyMeta = {
-    makeModel: MakeModel, 
+    makeModel: MakeProperty, 
     validators: Array<PropertyValidator>,
     label: string|null,
 }
@@ -18,7 +18,7 @@ export function setProperty(
     propName: string|symbol, 
     label: string|null = null,
     validators: Array<PropertyValidator> = [],
-    makeModel: MakeModel|null = null
+    makeModel: MakeProperty|null = null
 ): void {
     if(!model[__classModelPropertiesKey]) {
         Object.defineProperty(model, __classModelPropertiesKey, {
@@ -124,7 +124,7 @@ export function getPropertyValidators(
 export function getMaybeMakeModelFn(
     model: object, 
     propName: string|symbol
-): null|MakeModel {
+): null|MakeProperty {
     const propMeta = getPropertyMeta(model, propName)
     return (!propMeta || !propMeta.makeModel)
         ? null

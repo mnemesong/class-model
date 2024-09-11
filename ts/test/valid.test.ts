@@ -116,3 +116,59 @@ describe("oneOf", () => {
         ])
     })
 })
+
+class ScalarCheckClass {
+    @property("A", [valid.scalar()])
+    public a: any
+}
+
+describe("scalar", () => {
+    it("valid", () => {
+        const obj = new ScalarCheckClass()
+        obj.a = "1984"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid", () => {
+        const obj = new ScalarCheckClass()
+        obj.a = []
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A should be scalar, but it instance of object:Array"
+        ])
+    })
+})
+
+class ArrayOfCheckClass {
+    @property("A", [valid.arrayOf(valid.strictEqual("aaa"))])
+    public a: any
+}
+
+describe("arrayOf", () => {
+    it("valid", () => {
+        const obj = new ArrayOfCheckClass()
+        obj.a = ["aaa", "aaa", "aaa"]
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid 1", () => {
+        const obj = new ArrayOfCheckClass()
+        obj.a = ["aaa", "aaa", "bbb"]
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "One or more elements in array fail validation:" 
+                + " item of A should be equals to \"aaa\""
+        ])
+    })
+
+    it("invalid 2", () => {
+        const obj = new ArrayOfCheckClass()
+        obj.a = "aaa"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "Property A should be array, gets string" 
+        ])
+    })
+})

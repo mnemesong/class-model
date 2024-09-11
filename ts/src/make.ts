@@ -1,12 +1,12 @@
 import { loadData } from "."
 import { getAllPropertiesMeta } from "./utils"
 
-export type MakeModel = (data: any) => any
+export type MakeProperty = (data: any) => any
 
 /**
  * Load model uses getter
  */
-export function model(getModel: () => object): MakeModel {
+export function model(getModel: () => object): MakeProperty {
     return function(data) {
         if(typeof data !== "object") {
             throw new Error("Cannot load not object data to model")
@@ -23,12 +23,24 @@ export function model(getModel: () => object): MakeModel {
 /**
  * Load array of models uses getter
  */
-export function modelsArray(getModel: () => object): MakeModel {
+export function modelsArray(getModel: () => object): MakeProperty {
     return function(data) {
         if(!Array.isArray(data)) {
             throw new Error("try to load models array by not array of data")
         }
         const loader = model(getModel)
         return data.map(v => loader(v))
+    }
+}
+
+/**
+ * Load bigint
+ */
+export function bigInt(): MakeProperty {
+    return function(data) {
+        if(!["bigint", "number", "string", "boolean"].includes(typeof data)) {
+            throw new Error("Try to construct bigint from invalid data value")
+        }
+        return BigInt(data)
     }
 }
