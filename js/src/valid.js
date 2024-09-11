@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.date = exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
+exports.number = exports.date = exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
 var util_1 = require("util");
 /**
  * Strict not deep equals to scalar val
@@ -268,10 +268,29 @@ function date(valid) {
         var result = valid(propVal);
         if (typeof result === "boolean") {
             return !result
-                ? ["Invalid date value " + propVal.toDateString()]
+                ? [propLabel + " is invalid date value " + propVal.toDateString()]
                 : [];
         }
         return result;
     };
 }
 exports.date = date;
+function number(valid) {
+    if (valid === void 0) { valid = null; }
+    return function (propName, propLabel, propVal) {
+        if (typeof propVal !== "number") {
+            return ["Property " + propLabel + " is not a number"];
+        }
+        if (!valid) {
+            return [];
+        }
+        var result = valid(propVal);
+        if (typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid number value " + JSON.stringify(propVal)]
+                : [];
+        }
+        return result;
+    };
+}
+exports.number = number;

@@ -35,12 +35,16 @@ export function modelsArray(getModel: () => object): MakeProperty {
 /**
  * Load bigint
  */
-export function bigInt(): MakeProperty {
+export function bigInt(
+    printData: ((v: any) => string)|null = null
+): MakeProperty {
     return function(data) {
-        if(!["bigint", "number", "string", "boolean"].includes(typeof data)) {
-            throw new Error("Try to construct bigint from invalid data value")
+        try {
+            return BigInt(data as string)
+        } catch (e) {
+            throw new Error("Try to parse as a bigint invalid value" 
+                + (!printData ? "" : (": " + printData(data))))
         }
-        return BigInt(data)
     }
 }
 
@@ -55,9 +59,71 @@ export function date(
             ? data
             : (new Date(data))
         if(isNaN((dataObj as any))) {
-            throw new Error("Constructs invalid Date from value" 
+            throw new Error("Try to parse as a Date invalid value" 
                 + (!printData ? "" : (": " + printData(data))))
         }
         return dataObj
+    }
+}
+
+/**
+ * Parse data as a Float
+ */
+export function float(
+    printData: ((v: any) => string)|null = null
+): MakeProperty {
+    return function(data) {
+        let number = NaN
+        switch (typeof data) {
+            case "number":
+                number = data;
+                break;
+            case "bigint":
+            case "boolean":
+                number = (Number(data));
+                break;
+            case "string":
+                parseFloat(data);
+                break;
+        }
+        if(isNaN(number)) {
+            throw new Error("Try to parse as a float invalid value" 
+                + (!printData ? "" : (": " + printData(data))))
+        }
+        return number
+    }
+}
+
+/**
+ * Parse data as a Float
+ */
+ export function int(
+    printData: ((v: any) => string)|null = null,
+    roundStrategy: "round"|"floor"|"ceil" = "round"
+): MakeProperty {
+    return function(data) {
+        const round = (roundStrategy === "round")
+            ? Math.round
+            : ((roundStrategy === "ceil")
+                ? Math.ceil
+                : Math.floor)
+        let number = NaN
+        switch (typeof data) {
+            case "number":
+                number = round(data);
+                break;
+            case "bigint":
+            case "boolean":
+                number = (round(Number(data)));
+                break;
+            case "string":
+                number = parseInt(data);
+                break;
+        }
+        if(isNaN(number)) {
+            throw new Error("Try to parse as a int invalid value" 
+                + (!printData ? "" : (": " + printData(data))))
+        }
+        return number
     }
 }

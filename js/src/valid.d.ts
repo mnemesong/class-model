@@ -65,3 +65,4 @@ export declare function not(valid: PropertyValidator): PropertyValidator;
  * Date validation by lambda
  */
 export declare function date(valid?: ((d: Date) => string[] | boolean) | null): PropertyValidator;
+export declare function number(valid?: ((n: number) => string[] | boolean) | null): PropertyValidator;

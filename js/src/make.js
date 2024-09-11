@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.date = exports.bigInt = exports.modelsArray = exports.model = void 0;
+exports.int = exports.float = exports.date = exports.bigInt = exports.modelsArray = exports.model = void 0;
 var _1 = require(".");
 /**
  * Load model uses getter
@@ -35,12 +35,16 @@ exports.modelsArray = modelsArray;
 /**
  * Load bigint
  */
-function bigInt() {
+function bigInt(printData) {
+    if (printData === void 0) { printData = null; }
     return function (data) {
-        if (!["bigint", "number", "string", "boolean"].includes(typeof data)) {
-            throw new Error("Try to construct bigint from invalid data value");
+        try {
+            return BigInt(data);
         }
-        return BigInt(data);
+        catch (e) {
+            throw new Error("Try to parse as a bigint invalid value"
+                + (!printData ? "" : (": " + printData(data))));
+        }
     };
 }
 exports.bigInt = bigInt;
@@ -54,10 +58,70 @@ function date(printData) {
             ? data
             : (new Date(data));
         if (isNaN(dataObj)) {
-            throw new Error("Constructs invalid Date from value"
+            throw new Error("Try to parse as a Date invalid value"
                 + (!printData ? "" : (": " + printData(data))));
         }
         return dataObj;
     };
 }
 exports.date = date;
+/**
+ * Parse data as a Float
+ */
+function float(printData) {
+    if (printData === void 0) { printData = null; }
+    return function (data) {
+        var number = NaN;
+        switch (typeof data) {
+            case "number":
+                number = data;
+                break;
+            case "bigint":
+            case "boolean":
+                number = (Number(data));
+                break;
+            case "string":
+                parseFloat(data);
+                break;
+        }
+        if (isNaN(number)) {
+            throw new Error("Try to parse as a float invalid value"
+                + (!printData ? "" : (": " + printData(data))));
+        }
+        return number;
+    };
+}
+exports.float = float;
+/**
+ * Parse data as a Float
+ */
+function int(printData, roundStrategy) {
+    if (printData === void 0) { printData = null; }
+    if (roundStrategy === void 0) { roundStrategy = "round"; }
+    return function (data) {
+        var round = (roundStrategy === "round")
+            ? Math.round
+            : ((roundStrategy === "ceil")
+                ? Math.ceil
+                : Math.floor);
+        var number = NaN;
+        switch (typeof data) {
+            case "number":
+                number = round(data);
+                break;
+            case "bigint":
+            case "boolean":
+                number = (round(Number(data)));
+                break;
+            case "string":
+                number = parseInt(data);
+                break;
+        }
+        if (isNaN(number)) {
+            throw new Error("Try to parse as a int invalid value"
+                + (!printData ? "" : (": " + printData(data))));
+        }
+        return number;
+    };
+}
+exports.int = int;

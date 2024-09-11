@@ -401,7 +401,39 @@ var DateCheckClass = /** @class */ (function () {
         obj.a = new Date("2021-01-01");
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
-            "Invalid date value Fri Jan 01 2021"
+            "A is invalid date value Fri Jan 01 2021"
+        ]);
+    });
+});
+var NumberCheckClass = /** @class */ (function () {
+    function NumberCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", valid.number(function (d) { return (d % 2 === 0); }))
+    ], NumberCheckClass.prototype, "a", void 0);
+    return NumberCheckClass;
+}());
+(0, mocha_1.describe)("number", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new NumberCheckClass();
+        obj.a = 12;
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid 1", function () {
+        var obj = new NumberCheckClass();
+        obj.a = 11;
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A is invalid number value 11"
+        ]);
+    });
+    (0, mocha_1.it)("invalid 2", function () {
+        var obj = new NumberCheckClass();
+        obj.a = "A";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "Property A is not a number"
         ]);
     });
 });

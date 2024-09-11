@@ -287,7 +287,27 @@ export function date(
         const result = valid(propVal)
         if(typeof result === "boolean") {
             return !result
-                ? ["Invalid date value " + propVal.toDateString()]
+                ? [propLabel + " is invalid date value " + propVal.toDateString()]
+                : []
+        }
+        return result
+    }
+}
+
+export function number(
+    valid: ((n: number) => string[]|boolean)|null = null
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(typeof propVal !== "number") {
+            return ["Property " + propLabel + " is not a number"];
+        }
+        if(!valid) {
+            return [];
+        }
+        const result = valid(propVal)
+        if(typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid number value " + JSON.stringify(propVal)]
                 : []
         }
         return result

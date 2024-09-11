@@ -1,5 +1,5 @@
 import { describe, it } from "mocha";
-import { date, model, modelsArray } from "../src/make";
+import { date, int, model, modelsArray } from "../src/make";
 import { loadData, property, valid } from "../src";
 import assert from "assert";
 
@@ -95,8 +95,31 @@ describe("make Date", () => {
     })
 
     it("invalid", () => {
-        const obj = new MakeDateTestClass
+        const obj = new MakeDateTestClass()
         const data = {as: "a"}
+        const loadResult = loadData(obj, data)
+        assert.strictEqual(loadResult, false)
+        assert.strictEqual(obj.a, undefined)
+    })
+})
+
+class MakeIntTestClass {
+    @property("As", valid.any(), int())
+    public a: any
+}
+
+describe("make Int", () => {
+    it("valid 1", () => {
+        const obj = new MakeIntTestClass()
+        const data = {a: "12"}
+        const loadResult = loadData(obj, data)
+        assert.strictEqual(loadResult, true)
+        assert.strictEqual(obj.a, 12)
+    })
+
+    it("invalid", () => {
+        const obj = new MakeIntTestClass()
+        const data = {a: "a"}
         const loadResult = loadData(obj, data)
         assert.strictEqual(loadResult, false)
         assert.strictEqual(obj.a, undefined)

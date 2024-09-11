@@ -19,15 +19,10 @@
         + and
         + or
         + not
-    - date
-        - dateMax
-        - dateMin
-    - number
-        - numDivBy
-        - numNegative
-        - numPositive
-        - numMax
-        - numMin
+    + date
+        + date
+    + number
+        + number
     - object
         - objInstance
         - objNotEmpty

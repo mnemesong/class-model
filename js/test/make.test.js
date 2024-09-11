@@ -110,8 +110,32 @@ var MakeDateTestClass = /** @class */ (function () {
         assert_1.default.strictEqual(obj.a.getFullYear(), 2022);
     });
     (0, mocha_1.it)("invalid", function () {
-        var obj = new MakeDateTestClass;
+        var obj = new MakeDateTestClass();
         var data = { as: "a" };
+        var loadResult = (0, src_1.loadData)(obj, data);
+        assert_1.default.strictEqual(loadResult, false);
+        assert_1.default.strictEqual(obj.a, undefined);
+    });
+});
+var MakeIntTestClass = /** @class */ (function () {
+    function MakeIntTestClass() {
+    }
+    __decorate([
+        (0, src_1.property)("As", src_1.valid.any(), (0, make_1.int)())
+    ], MakeIntTestClass.prototype, "a", void 0);
+    return MakeIntTestClass;
+}());
+(0, mocha_1.describe)("make Int", function () {
+    (0, mocha_1.it)("valid 1", function () {
+        var obj = new MakeIntTestClass();
+        var data = { a: "12" };
+        var loadResult = (0, src_1.loadData)(obj, data);
+        assert_1.default.strictEqual(loadResult, true);
+        assert_1.default.strictEqual(obj.a, 12);
+    });
+    (0, mocha_1.it)("invalid", function () {
+        var obj = new MakeIntTestClass();
+        var data = { a: "a" };
         var loadResult = (0, src_1.loadData)(obj, data);
         assert_1.default.strictEqual(loadResult, false);
         assert_1.default.strictEqual(obj.a, undefined);

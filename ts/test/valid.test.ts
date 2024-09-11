@@ -361,7 +361,41 @@ describe("date", () => {
         obj.a = new Date("2021-01-01")
         const validErrors = validationErrors(obj)
         assert.deepStrictEqual(validErrors, [
-            "Invalid date value Fri Jan 01 2021"
+            "A is invalid date value Fri Jan 01 2021"
+        ])
+    })
+})
+
+class NumberCheckClass {
+    @property("A", valid.number(
+        (d) => (d % 2 === 0),
+    ))
+    public a: any
+}
+
+describe("number", () => {
+    it("valid", () => {
+        const obj = new NumberCheckClass()
+        obj.a = 12
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid 1", () => {
+        const obj = new NumberCheckClass()
+        obj.a = 11
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A is invalid number value 11"
+        ])
+    })
+
+    it("invalid 2", () => {
+        const obj = new NumberCheckClass()
+        obj.a = "A"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "Property A is not a number"
         ])
     })
 })
