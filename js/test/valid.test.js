@@ -62,7 +62,7 @@ var DeepStrictEqualCheckClass = /** @class */ (function () {
     function DeepStrictEqualCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.strictDeepEqual({ b: "asd" }, true)])
+        (0, src_1.property)("A", [valid.strictDeepEqual({ b: "asd" }, function (v) { return JSON.stringify(v); })])
     ], DeepStrictEqualCheckClass.prototype, "a", void 0);
     return DeepStrictEqualCheckClass;
 }());
@@ -78,7 +78,7 @@ var DeepStrictEqualCheckClass = /** @class */ (function () {
         obj.a = "12";
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
-            "A should be equals to {\"b\":\"asd\"} but actual it is \"12\""
+            "A should be equals to {\"b\":\"asd\"}, but actual it is \"12\""
         ]);
     });
 });
@@ -134,7 +134,7 @@ var OneOfCheckClass = /** @class */ (function () {
     function OneOfCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.oneOf(["Rick", "Morty"], true)])
+        (0, src_1.property)("A", [valid.oneOf(["Rick", "Morty"], function (v) { return JSON.stringify(v); })])
     ], OneOfCheckClass.prototype, "a", void 0);
     return OneOfCheckClass;
 }());
@@ -150,7 +150,7 @@ var OneOfCheckClass = /** @class */ (function () {
         obj.a = "42";
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
-            "A should be one of [\"Rick\",\"Morty\"] but actual it is \"42\""
+            "A should be one of [\"Rick\", \"Morty\"], but actual it is \"42\""
         ]);
     });
 });
@@ -208,6 +208,30 @@ var ArrayOfCheckClass = /** @class */ (function () {
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
             "Property A should be array, gets string"
+        ]);
+    });
+});
+var ArrayDeepStrickUniqueCheckClass = /** @class */ (function () {
+    function ArrayDeepStrickUniqueCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", [valid.arrayDeepStrictUnique(function (v) { return JSON.stringify(v); })])
+    ], ArrayDeepStrickUniqueCheckClass.prototype, "a", void 0);
+    return ArrayDeepStrickUniqueCheckClass;
+}());
+(0, mocha_1.describe)("arrayDeepStrictUnique", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new ArrayDeepStrickUniqueCheckClass();
+        obj.a = ["!!!!!", 42, [], 15];
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid", function () {
+        var obj = new ArrayDeepStrickUniqueCheckClass();
+        obj.a = ["!!!!!", 42, [], []];
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A should be array of unique values. Found not unique element: []"
         ]);
     });
 });

@@ -3,11 +3,7 @@
 3. + Add Readme.md
 4.   Make validators
     - array
-        - arrayContains
-        - arrayMaxSize
-        - arrayMinSize
-        - arrayNotContains
-        - arrayUnique
+        + arrayUnique
         + arrayOf
         - arrayCount
     + common

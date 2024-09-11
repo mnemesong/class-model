@@ -140,8 +140,7 @@ Validator is function kind of:
 ```typescript
 type PropertyValidator = (propName: string, propLabel: string, propVal: any) => string[]
 ```
-Some popular validators are also prepared for you, and keeps in `classModel.valid`
-module.
+Some popular validators are also prepared for you, and keeps in `classModel.valid` module.
 
 #### List of validators:
 ```typescript

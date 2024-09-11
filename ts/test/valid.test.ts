@@ -26,7 +26,7 @@ describe("strictEqual", () => {
 
 
 class DeepStrictEqualCheckClass {
-    @property("A", [valid.strictDeepEqual({b: "asd"}, true)])
+    @property("A", [valid.strictDeepEqual({b: "asd"}, (v) => JSON.stringify(v))])
     public a: any
 }
 
@@ -43,7 +43,7 @@ describe("deepStrictEqual", () => {
         obj.a = "12"
         const validErrors = validationErrors(obj)
         assert.deepStrictEqual(validErrors, [
-            "A should be equals to {\"b\":\"asd\"} but actual it is \"12\""
+            "A should be equals to {\"b\":\"asd\"}, but actual it is \"12\""
         ])
     })
 })
@@ -95,7 +95,7 @@ describe("empty", () => {
 })
 
 class OneOfCheckClass {
-    @property("A", [valid.oneOf(["Rick", "Morty"], true)])
+    @property("A", [valid.oneOf(["Rick", "Morty"], (v) => JSON.stringify(v))])
     public a: any
 }
 
@@ -112,7 +112,7 @@ describe("oneOf", () => {
         obj.a = "42"
         const validErrors = validationErrors(obj)
         assert.deepStrictEqual(validErrors, [
-            "A should be one of [\"Rick\",\"Morty\"] but actual it is \"42\""
+            "A should be one of [\"Rick\", \"Morty\"], but actual it is \"42\""
         ])
     })
 })
@@ -169,6 +169,29 @@ describe("arrayOf", () => {
         const validErrors = validationErrors(obj)
         assert.deepStrictEqual(validErrors, [
             "Property A should be array, gets string" 
+        ])
+    })
+})
+
+class ArrayDeepStrickUniqueCheckClass {
+    @property("A", [valid.arrayDeepStrictUnique((v) => JSON.stringify(v))])
+    public a: any
+}
+
+describe("arrayDeepStrictUnique", () => {
+    it("valid", () => {
+        const obj = new ArrayDeepStrickUniqueCheckClass()
+        obj.a = ["!!!!!", 42, [], 15]
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid", () => {
+        const obj = new ArrayDeepStrickUniqueCheckClass()
+        obj.a = ["!!!!!", 42, [], []]
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A should be array of unique values. Found not unique element: []"
         ])
     })
 })

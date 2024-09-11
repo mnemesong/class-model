@@ -1,38 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
+exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
 var util_1 = require("util");
 /**
  * Strict not deep equals to scalar val
  */
-function strictEqual(val, printActualVal) {
-    if (printActualVal === void 0) { printActualVal = false; }
+function strictEqual(val, printValue) {
+    if (printValue === void 0) { printValue = null; }
     return function (propName, propLabel, propVal) {
         return (propVal === val)
             ? []
             : [propLabel + " should be equals to " + JSON.stringify(val)
-                    + (printActualVal
-                        ? (" but actual it is " + JSON.stringify(propVal))
-                        : "")];
+                    + ((printValue === null)
+                        ? ""
+                        : (", but actual it is " + printValue(propVal)))];
     };
 }
 exports.strictEqual = strictEqual;
 /**
  * Deep strict equals validator
  */
-function strictDeepEqual(val, printActualVal, serialize) {
-    if (printActualVal === void 0) { printActualVal = false; }
-    if (serialize === void 0) { serialize = null; }
-    if (!serialize) {
-        serialize = (function (v) { return JSON.stringify(v); });
-    }
+function strictDeepEqual(val, printValue) {
+    if (printValue === void 0) { printValue = null; }
     return function (propName, propLabel, propVal) {
         return ((0, util_1.isDeepStrictEqual)(propVal, val))
             ? []
-            : [propLabel + " should be equals to " + serialize(val)
-                    + (printActualVal
-                        ? (" but actual it is " + serialize(propVal))
-                        : "")];
+            : [propLabel + " should be equals to "
+                    + ((printValue === null) ? "special value" : printValue(val))
+                    + ((printValue === null)
+                        ? ""
+                        : (", but actual it is " + printValue(propVal)))];
     };
 }
 exports.strictDeepEqual = strictDeepEqual;
@@ -61,19 +58,18 @@ exports.empty = empty;
 /**
  * Deep strict equals validator
  */
-function oneOf(vals, printActualVal, serialize) {
-    if (printActualVal === void 0) { printActualVal = false; }
-    if (serialize === void 0) { serialize = null; }
-    if (!serialize) {
-        serialize = (function (v) { return JSON.stringify(v); });
-    }
+function oneOf(vals, printValue) {
+    if (printValue === void 0) { printValue = null; }
     return function (propName, propLabel, propVal) {
         return (vals.includes(propVal))
             ? []
-            : [propLabel + " should be one of " + JSON.stringify(vals)
-                    + (printActualVal
-                        ? (" but actual it is " + serialize(propVal))
-                        : "")];
+            : [propLabel + " should be one of"
+                    + ((printValue === null)
+                        ? "special values"
+                        : (" [" + vals.map(function (v) { return printValue(v); }).join(", ")) + "]")
+                    + ((printValue === null)
+                        ? ""
+                        : (", but actual it is " + printValue(propVal)))];
     };
 }
 exports.oneOf = oneOf;
@@ -149,3 +145,29 @@ function arrayOf(itemValidator) {
     };
 }
 exports.arrayOf = arrayOf;
+/**
+ * Checks is property value is array have n of X values
+ */
+function arrayDeepStrictUnique(printVal) {
+    if (printVal === void 0) { printVal = null; }
+    return function (propName, propLabel, propVal) {
+        if (!Array.isArray(propVal)) {
+            return ["Property " + propLabel + " should be array, gets "
+                    + (typeof propVal)];
+        }
+        var filtered = propVal.reduce(function (acc, el) {
+            if (acc !== undefined) {
+                return acc;
+            }
+            var filterFn = (typeof el === "object")
+                ? (function (v) { return (0, util_1.isDeepStrictEqual)(v, el); })
+                : (function (v) { return v === el; });
+            return propVal.filter(filterFn)[1];
+        }, undefined);
+        return (filtered === undefined)
+            ? []
+            : [propLabel + " should be array of unique values. Found not unique element"
+                    + ((printVal === null) ? "" : (": " + printVal(filtered)))];
+    };
+}
+exports.arrayDeepStrictUnique = arrayDeepStrictUnique;

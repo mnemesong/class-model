@@ -3,20 +3,22 @@ import { MakeProperty } from "./make"
 
 export type PropertyValidator = (propName: string, propLabel: string, propVal: any) => string[]
 
+export type ValuePrinter = (v: any) => string
+
 /**
  * Strict not deep equals to scalar val
  */
 export function strictEqual(
     val: string|bigint|number|boolean|null|undefined|symbol,
-    printActualVal: boolean = false
+    printValue: ValuePrinter|null = null
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         return (propVal === val)
             ? []
             : [propLabel + " should be equals to " + JSON.stringify(val)
-                + (printActualVal 
-                    ? (" but actual it is " + JSON.stringify(propVal)) 
-                    : "")]
+                + ((printValue === null) 
+                    ? ""
+                    : (", but actual it is " + printValue(propVal)) )]
     }
 }
 
@@ -25,19 +27,16 @@ export function strictEqual(
  */
 export function strictDeepEqual(
     val: any,
-    printActualVal: boolean = false,
-    serialize: ((v) => string)|null = null
+    printValue: ValuePrinter|null = null
 ): PropertyValidator {
-    if(!serialize) {
-        serialize = ((v) => JSON.stringify(v))
-    }
     return function(propName, propLabel, propVal) {
         return (isDeepStrictEqual(propVal, val))
             ? []
-            : [propLabel + " should be equals to " + serialize(val)
-                + (printActualVal 
-                    ? (" but actual it is " + serialize(propVal)) 
-                    : "")]
+            : [propLabel + " should be equals to "
+                + ((printValue === null) ? "special value" : printValue(val))
+                + ((printValue === null) 
+                    ? "" 
+                    : (", but actual it is " + printValue(propVal)))]
     }
 }
 
@@ -68,19 +67,18 @@ export function required(): PropertyValidator {
  */
  export function oneOf(
     vals: Array<any>,
-    printActualVal: boolean = false,
-    serialize: ((v) => string)|null = null
+    printValue: ValuePrinter|null = null
 ): PropertyValidator {
-    if(!serialize) {
-        serialize = ((v) => JSON.stringify(v))
-    }
     return function(propName, propLabel, propVal) {
         return (vals.includes(propVal))
             ? []
-            : [propLabel + " should be one of " + JSON.stringify(vals)
-                + (printActualVal 
-                    ? (" but actual it is " + serialize(propVal)) 
-                    : "")]
+            : [propLabel + " should be one of"
+                + ((printValue === null) 
+                    ? "special values" 
+                    : (" [" + vals.map(v => printValue(v)).join(", ")) + "]")
+                + ((printValue === null) 
+                ? "" 
+                : (", but actual it is " + printValue(propVal)))]
     }
 }
 
@@ -155,5 +153,32 @@ export function arrayOf(
             : propertiesValidationResult.map(e => {
                 return "One or more elements in array fail validation: " + e
             })
+    }
+}
+
+/**
+ * Checks is property value is array have n of X values
+ */
+ export function arrayDeepStrictUnique(
+    printVal: ValuePrinter|null = null
+ ): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(!Array.isArray(propVal)) {
+            return ["Property " + propLabel + " should be array, gets "
+            + (typeof propVal)]
+        }
+        const filtered = propVal.reduce((acc, el) => {
+            if(acc !== undefined) {
+                return acc
+            }
+            const filterFn = (typeof el === "object")
+                ? ((v: object) => isDeepStrictEqual(v, el))
+                : ((v: any) => v === el)
+            return propVal.filter(filterFn)[1]
+        }, undefined)
+        return (filtered === undefined)
+            ? []
+            : [propLabel + " should be array of unique values. Found not unique element"
+                + ((printVal === null) ? "" : (": " + printVal(filtered)))];
     }
 }
