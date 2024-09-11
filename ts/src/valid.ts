@@ -1,5 +1,4 @@
 import { isDeepStrictEqual } from "util"
-import { MakeProperty } from "./make"
 
 export type PropertyValidator = (propName: string, propLabel: string, propVal: any) => string[]
 

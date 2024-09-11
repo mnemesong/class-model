@@ -11,11 +11,11 @@ import * as make from "./make"
  */
  export function property(
     label: string|null = null, 
-    validators: Array<PropertyValidator>,
+    validator: PropertyValidator|null = null,
     makeModel: make.MakeProperty|null = null
 ): PropertyDecorator {
     return (target, propKey) => {
-        utils.setProperty(target, propKey, label, validators, makeModel)
+        utils.setProperty(target, propKey, label, validator, makeModel)
     }
 }
 
@@ -58,9 +58,14 @@ import * as make from "./make"
     let result = []
     const propMetas = utils.getAllPropertiesMeta(model)
     Object.keys(propMetas).forEach(propName => {
-        propMetas[propName].validators.forEach((v: PropertyValidator) => {
-            result = result.concat(v(propName, utils.getPropertyLabel(model, propName), model[propName])) 
-        })
+        result = result.concat(
+            !propMetas[propName].validator 
+                ? []
+                : propMetas[propName].validator(
+                    propName, 
+                    utils.getPropertyLabel(model, propName), model[propName]
+                )
+        )
     })
     return result
 }

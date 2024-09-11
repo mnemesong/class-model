@@ -1,15 +1,15 @@
 import { describe, it } from "mocha";
 import { model, modelsArray } from "../src/make";
-import { loadData, property } from "../src";
+import { loadData, property, valid } from "../src";
 import assert from "assert";
 
 class SubModel {
-    @property("A", [])
+    @property("A")
     a: number = 12
 }
 
 class MakeModelTestClass {
-    @property("As", [], model(() => new SubModel()))
+    @property("As", null, model(() => new SubModel()))
     public as: SubModel
 }
 
@@ -40,7 +40,7 @@ describe("make Model", () => {
 })
 
 class MakeModelsArrayTestClass {
-    @property("As", [], modelsArray(() => new SubModel()))
+    @property("As", valid.any(), modelsArray(() => new SubModel()))
     public as: SubModel[]
 }
 

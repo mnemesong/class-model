@@ -40,7 +40,7 @@ var StrictEqualCheckClass = /** @class */ (function () {
     function StrictEqualCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.strictEqual("12")])
+        (0, src_1.property)("A", valid.strictEqual("12"))
     ], StrictEqualCheckClass.prototype, "a", void 0);
     return StrictEqualCheckClass;
 }());
@@ -62,7 +62,7 @@ var DeepStrictEqualCheckClass = /** @class */ (function () {
     function DeepStrictEqualCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.strictDeepEqual({ b: "asd" }, function (v) { return JSON.stringify(v); })])
+        (0, src_1.property)("A", valid.strictDeepEqual({ b: "asd" }, function (v) { return JSON.stringify(v); }))
     ], DeepStrictEqualCheckClass.prototype, "a", void 0);
     return DeepStrictEqualCheckClass;
 }());
@@ -86,7 +86,7 @@ var RequiredCheckClass = /** @class */ (function () {
     function RequiredCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.required()])
+        (0, src_1.property)("A", valid.required())
     ], RequiredCheckClass.prototype, "a", void 0);
     return RequiredCheckClass;
 }());
@@ -110,7 +110,7 @@ var EmptyCheckClass = /** @class */ (function () {
     function EmptyCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.empty()])
+        (0, src_1.property)("A", valid.empty())
     ], EmptyCheckClass.prototype, "a", void 0);
     return EmptyCheckClass;
 }());
@@ -134,7 +134,7 @@ var OneOfCheckClass = /** @class */ (function () {
     function OneOfCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.oneOf(["Rick", "Morty"], function (v) { return JSON.stringify(v); })])
+        (0, src_1.property)("A", valid.oneOf(["Rick", "Morty"], function (v) { return JSON.stringify(v); }))
     ], OneOfCheckClass.prototype, "a", void 0);
     return OneOfCheckClass;
 }());
@@ -158,7 +158,7 @@ var ScalarCheckClass = /** @class */ (function () {
     function ScalarCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.scalar()])
+        (0, src_1.property)("A", valid.scalar())
     ], ScalarCheckClass.prototype, "a", void 0);
     return ScalarCheckClass;
 }());
@@ -182,7 +182,7 @@ var ArrayOfCheckClass = /** @class */ (function () {
     function ArrayOfCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.arrayOf(valid.strictEqual("aaa"))])
+        (0, src_1.property)("A", valid.arrayOf(valid.strictEqual("aaa")))
     ], ArrayOfCheckClass.prototype, "a", void 0);
     return ArrayOfCheckClass;
 }());
@@ -215,7 +215,7 @@ var ArrayDeepStrictUniqueCheckClass = /** @class */ (function () {
     function ArrayDeepStrictUniqueCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.arrayDeepStrictUnique(function (v) { return JSON.stringify(v); })])
+        (0, src_1.property)("A", valid.arrayDeepStrictUnique(function (v) { return JSON.stringify(v); }))
     ], ArrayDeepStrictUniqueCheckClass.prototype, "a", void 0);
     return ArrayDeepStrictUniqueCheckClass;
 }());
@@ -239,7 +239,7 @@ var ArrayCountCheckClass = /** @class */ (function () {
     function ArrayCountCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.arrayCount(function (n) { return n === 3; })])
+        (0, src_1.property)("A", valid.arrayCount(function (n) { return n === 3; }))
     ], ArrayCountCheckClass.prototype, "a", void 0);
     return ArrayCountCheckClass;
 }());
@@ -263,10 +263,10 @@ var ArrayTupleCheckClass = /** @class */ (function () {
     function ArrayTupleCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.arrayTuple([
-                valid.strictDeepEqual(12),
-                valid.scalar()
-            ])])
+        (0, src_1.property)("A", valid.arrayTuple([
+            valid.strictDeepEqual(12),
+            valid.scalar()
+        ]))
     ], ArrayTupleCheckClass.prototype, "a", void 0);
     return ArrayTupleCheckClass;
 }());
@@ -290,10 +290,10 @@ var AndCheckClass = /** @class */ (function () {
     function AndCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.and([
-                valid.scalar(),
-                valid.strictDeepEqual(12, function (v) { return JSON.stringify(v); }),
-            ])])
+        (0, src_1.property)("A", valid.and([
+            valid.scalar(),
+            valid.strictDeepEqual(12, function (v) { return JSON.stringify(v); }),
+        ]))
     ], AndCheckClass.prototype, "a", void 0);
     return AndCheckClass;
 }());
@@ -317,10 +317,10 @@ var OrCheckClass = /** @class */ (function () {
     function OrCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.or([
-                valid.strictEqual("twelve"),
-                valid.strictDeepEqual(12),
-            ])])
+        (0, src_1.property)("A", valid.or([
+            valid.strictEqual("twelve"),
+            valid.strictDeepEqual(12),
+        ]))
     ], OrCheckClass.prototype, "a", void 0);
     return OrCheckClass;
 }());
@@ -345,7 +345,7 @@ var NotCheckClass = /** @class */ (function () {
     function NotCheckClass() {
     }
     __decorate([
-        (0, src_1.property)("A", [valid.not(valid.strictEqual("twelve"))])
+        (0, src_1.property)("A", valid.not(valid.strictEqual("twelve")))
     ], NotCheckClass.prototype, "a", void 0);
     return NotCheckClass;
 }());

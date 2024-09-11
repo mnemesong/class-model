@@ -4,7 +4,7 @@ import * as valid from "../src/valid";
 import assert from "assert";
 
 class StrictEqualCheckClass {
-    @property("A", [valid.strictEqual("12")])
+    @property("A", valid.strictEqual("12"))
     public a: string
 }
 
@@ -26,7 +26,7 @@ describe("strictEqual", () => {
 
 
 class DeepStrictEqualCheckClass {
-    @property("A", [valid.strictDeepEqual({b: "asd"}, (v) => JSON.stringify(v))])
+    @property("A", valid.strictDeepEqual({b: "asd"}, (v) => JSON.stringify(v)))
     public a: any
 }
 
@@ -49,7 +49,7 @@ describe("deepStrictEqual", () => {
 })
 
 class RequiredCheckClass {
-    @property("A", [valid.required()])
+    @property("A", valid.required())
     public a: any
 }
 
@@ -72,7 +72,7 @@ describe("required", () => {
 })
 
 class EmptyCheckClass {
-    @property("A", [valid.empty()])
+    @property("A", valid.empty())
     public a: any
 }
 
@@ -95,7 +95,7 @@ describe("empty", () => {
 })
 
 class OneOfCheckClass {
-    @property("A", [valid.oneOf(["Rick", "Morty"], (v) => JSON.stringify(v))])
+    @property("A", valid.oneOf(["Rick", "Morty"], (v) => JSON.stringify(v)))
     public a: any
 }
 
@@ -118,7 +118,7 @@ describe("oneOf", () => {
 })
 
 class ScalarCheckClass {
-    @property("A", [valid.scalar()])
+    @property("A", valid.scalar())
     public a: any
 }
 
@@ -141,7 +141,7 @@ describe("scalar", () => {
 })
 
 class ArrayOfCheckClass {
-    @property("A", [valid.arrayOf(valid.strictEqual("aaa"))])
+    @property("A", valid.arrayOf(valid.strictEqual("aaa")))
     public a: any
 }
 
@@ -174,7 +174,7 @@ describe("arrayOf", () => {
 })
 
 class ArrayDeepStrictUniqueCheckClass {
-    @property("A", [valid.arrayDeepStrictUnique((v) => JSON.stringify(v))])
+    @property("A", valid.arrayDeepStrictUnique((v) => JSON.stringify(v)))
     public a: any
 }
 
@@ -197,7 +197,7 @@ describe("arrayDeepStrictUnique", () => {
 })
 
 class ArrayCountCheckClass {
-    @property("A", [valid.arrayCount((n) => n === 3)])
+    @property("A", valid.arrayCount((n) => n === 3))
     public a: any
 }
 
@@ -220,10 +220,10 @@ describe("arrayCount", () => {
 })
 
 class ArrayTupleCheckClass {
-    @property("A", [valid.arrayTuple([
+    @property("A", valid.arrayTuple([
         valid.strictDeepEqual(12),
         valid.scalar()
-    ])])
+    ]))
     public a: any
 }
 
@@ -246,10 +246,10 @@ describe("arrayTuple", () => {
 })
 
 class AndCheckClass {
-    @property("A", [valid.and([
+    @property("A", valid.and([
         valid.scalar(),
         valid.strictDeepEqual(12, (v) => JSON.stringify(v)),
-    ])])
+    ]))
     public a: any
 }
 
@@ -272,10 +272,10 @@ describe("and", () => {
 })
 
 class OrCheckClass {
-    @property("A", [valid.or([
+    @property("A", valid.or([
         valid.strictEqual("twelve"),
         valid.strictDeepEqual(12),
-    ])])
+    ]))
     public a: any
 }
 
@@ -299,9 +299,9 @@ describe("or", () => {
 })
 
 class NotCheckClass {
-    @property("A", [valid.not(
+    @property("A", valid.not(
         valid.strictEqual("twelve"),
-    )])
+    ))
     public a: any
 }
 

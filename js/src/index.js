@@ -31,11 +31,12 @@ var utils = __importStar(require("./utils"));
 /**
  * Decorator factory for defining property
  */
-function property(label, validators, makeModel) {
+function property(label, validator, makeModel) {
     if (label === void 0) { label = null; }
+    if (validator === void 0) { validator = null; }
     if (makeModel === void 0) { makeModel = null; }
     return function (target, propKey) {
-        utils.setProperty(target, propKey, label, validators, makeModel);
+        utils.setProperty(target, propKey, label, validator, makeModel);
     };
 }
 exports.property = property;
@@ -79,9 +80,9 @@ function validationErrors(model) {
     var result = [];
     var propMetas = utils.getAllPropertiesMeta(model);
     Object.keys(propMetas).forEach(function (propName) {
-        propMetas[propName].validators.forEach(function (v) {
-            result = result.concat(v(propName, utils.getPropertyLabel(model, propName), model[propName]));
-        });
+        result = result.concat(!propMetas[propName].validator
+            ? []
+            : propMetas[propName].validator(propName, utils.getPropertyLabel(model, propName), model[propName]));
     });
     return result;
 }

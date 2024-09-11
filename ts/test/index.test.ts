@@ -10,10 +10,10 @@ function strNotEmpty(prop: string, label: string, val: any) {
 }
 
 class UserAuth {
-    @property("Login", [strNotEmpty])
+    @property("Login", strNotEmpty)
     login: string
 
-    @property("Password", [strNotEmpty])
+    @property("Password", strNotEmpty)
     pass: string
 }
 

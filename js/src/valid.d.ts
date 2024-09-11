@@ -54,8 +54,8 @@ export declare function arrayTuple(valids: PropertyValidator[]): PropertyValidat
  */
 export declare function and(valids: PropertyValidator[]): PropertyValidator;
 /**
-* Return errors if everyone of validators are return errors
-*/
+ * Return errors if everyone of validators are return errors
+ */
 export declare function or(valids: PropertyValidator[]): PropertyValidator;
 /**
  * Return errors if everyone of validators are return errors

@@ -18,7 +18,7 @@ var SubModel = /** @class */ (function () {
         this.a = 12;
     }
     __decorate([
-        (0, src_1.property)("A", [])
+        (0, src_1.property)("A")
     ], SubModel.prototype, "a", void 0);
     return SubModel;
 }());
@@ -26,7 +26,7 @@ var MakeModelTestClass = /** @class */ (function () {
     function MakeModelTestClass() {
     }
     __decorate([
-        (0, src_1.property)("As", [], (0, make_1.model)(function () { return new SubModel(); }))
+        (0, src_1.property)("As", null, (0, make_1.model)(function () { return new SubModel(); }))
     ], MakeModelTestClass.prototype, "as", void 0);
     return MakeModelTestClass;
 }());
@@ -57,7 +57,7 @@ var MakeModelsArrayTestClass = /** @class */ (function () {
     function MakeModelsArrayTestClass() {
     }
     __decorate([
-        (0, src_1.property)("As", [], (0, make_1.modelsArray)(function () { return new SubModel(); }))
+        (0, src_1.property)("As", src_1.valid.any(), (0, make_1.modelsArray)(function () { return new SubModel(); }))
     ], MakeModelsArrayTestClass.prototype, "as", void 0);
     return MakeModelsArrayTestClass;
 }());

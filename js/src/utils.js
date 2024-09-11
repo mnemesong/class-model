@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMaybeMakeModelFn = exports.getPropertyValidators = exports.getPropertyLabel = exports.getProperties = exports.getAllPropertiesMeta = exports.getAllPropertiesLabels = exports.getPropertyMeta = exports.setProperty = exports.__classModelPropertiesKey = void 0;
+exports.getMaybeMakeModelFn = exports.getPropertyValidator = exports.getPropertyLabel = exports.getProperties = exports.getAllPropertiesMeta = exports.getAllPropertiesLabels = exports.getPropertyMeta = exports.setProperty = exports.__classModelPropertiesKey = void 0;
 exports.__classModelPropertiesKey = "__classModelProperties";
 /**
  * Sets property to model
  */
-function setProperty(model, propName, label, validators, makeModel) {
+function setProperty(model, propName, label, validator, makeModel) {
     if (label === void 0) { label = null; }
-    if (validators === void 0) { validators = []; }
+    if (validator === void 0) { validator = null; }
     if (makeModel === void 0) { makeModel = null; }
     if (!model[exports.__classModelPropertiesKey]) {
         Object.defineProperty(model, exports.__classModelPropertiesKey, {
@@ -16,7 +16,7 @@ function setProperty(model, propName, label, validators, makeModel) {
         });
     }
     model[exports.__classModelPropertiesKey][propName] = {
-        validators: validators,
+        validator: validator,
         label: label,
         makeModel: makeModel,
     };
@@ -87,13 +87,13 @@ exports.getPropertyLabel = getPropertyLabel;
 /**
  * Returns all geristered validators of the property
  */
-function getPropertyValidators(model, propName) {
+function getPropertyValidator(model, propName) {
     var propMeta = getPropertyMeta(model, propName);
-    return (!propMeta || !propMeta["validators"])
-        ? []
-        : propMeta["validators"];
+    return (!propMeta || !propMeta["validator"])
+        ? null
+        : propMeta["validator"];
 }
-exports.getPropertyValidators = getPropertyValidators;
+exports.getPropertyValidator = getPropertyValidator;
 /**
  * Returns special constructor of property, is it exists
  */

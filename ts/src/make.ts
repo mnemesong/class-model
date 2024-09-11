@@ -1,5 +1,4 @@
 import { loadData } from "."
-import { getAllPropertiesMeta } from "./utils"
 
 export type MakeProperty = (data: any) => any
 

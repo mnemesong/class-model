@@ -216,8 +216,8 @@ function and(valids) {
 }
 exports.and = and;
 /**
-* Return errors if everyone of validators are return errors
-*/
+ * Return errors if everyone of validators are return errors
+ */
 function or(valids) {
     return function (propName, propLabel, propVal) {
         var validResult = valids.map(function (v) {

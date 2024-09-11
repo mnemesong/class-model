@@ -5,7 +5,7 @@ export const __classModelPropertiesKey = "__classModelProperties"
 
 export type PropertyMeta = {
     makeModel: MakeProperty, 
-    validators: Array<PropertyValidator>,
+    validator: PropertyValidator|null,
     label: string|null,
 }
 
@@ -17,7 +17,7 @@ export function setProperty(
     model: object, 
     propName: string|symbol, 
     label: string|null = null,
-    validators: Array<PropertyValidator> = [],
+    validator: PropertyValidator|null = null,
     makeModel: MakeProperty|null = null
 ): void {
     if(!model[__classModelPropertiesKey]) {
@@ -27,7 +27,7 @@ export function setProperty(
         })
     }
     model[__classModelPropertiesKey][propName] = {
-        validators: validators, 
+        validator: validator, 
         label: label,
         makeModel: makeModel,
     }
@@ -108,14 +108,14 @@ export function getPropertyLabel(
 /**
  * Returns all geristered validators of the property
  */
-export function getPropertyValidators(
+export function getPropertyValidator(
     model: object, 
     propName: string|symbol
-): PropertyValidator[] {
+): PropertyValidator|null {
     const propMeta = getPropertyMeta(model, propName)
-    return (!propMeta || !propMeta["validators"])
-        ? []
-        : propMeta["validators"]
+    return (!propMeta || !propMeta["validator"])
+        ? null
+        : propMeta["validator"]
 }
 
 /**

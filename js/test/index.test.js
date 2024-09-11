@@ -42,10 +42,10 @@ var UserAuth = /** @class */ (function () {
     function UserAuth() {
     }
     __decorate([
-        (0, src_1.property)("Login", [strNotEmpty])
+        (0, src_1.property)("Login", strNotEmpty)
     ], UserAuth.prototype, "login", void 0);
     __decorate([
-        (0, src_1.property)("Password", [strNotEmpty])
+        (0, src_1.property)("Password", strNotEmpty)
     ], UserAuth.prototype, "pass", void 0);
     return UserAuth;
 }());
