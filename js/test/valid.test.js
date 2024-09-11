@@ -365,3 +365,43 @@ var NotCheckClass = /** @class */ (function () {
         ]);
     });
 });
+var DateCheckClass = /** @class */ (function () {
+    function DateCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", valid.date(function (d) { return (d.getFullYear() === 2022); }))
+    ], DateCheckClass.prototype, "a", void 0);
+    return DateCheckClass;
+}());
+(0, mocha_1.describe)("date", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new DateCheckClass();
+        obj.a = new Date("2022-11-11");
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid 1", function () {
+        var obj = new DateCheckClass();
+        obj.a = "a";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "Property A is not a Date"
+        ]);
+    });
+    (0, mocha_1.it)("invalid 2", function () {
+        var obj = new DateCheckClass();
+        obj.a = "2022-11-11";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "Property A is not a Date"
+        ]);
+    });
+    (0, mocha_1.it)("invalid 3", function () {
+        var obj = new DateCheckClass();
+        obj.a = new Date("2021-01-01");
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "Invalid date value Fri Jan 01 2021"
+        ]);
+    });
+});

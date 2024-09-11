@@ -322,3 +322,46 @@ describe("not", () => {
         ])
     })
 })
+
+class DateCheckClass {
+    @property("A", valid.date(
+        (d) => (d.getFullYear() === 2022),
+    ))
+    public a: any
+}
+
+describe("date", () => {
+    it("valid", () => {
+        const obj = new DateCheckClass()
+        obj.a = new Date("2022-11-11")
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid 1", () => {
+        const obj = new DateCheckClass()
+        obj.a = "a"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "Property A is not a Date"
+        ])
+    })
+
+    it("invalid 2", () => {
+        const obj = new DateCheckClass()
+        obj.a = "2022-11-11"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "Property A is not a Date"
+        ])
+    })
+
+    it("invalid 3", () => {
+        const obj = new DateCheckClass()
+        obj.a = new Date("2021-01-01")
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "Invalid date value Fri Jan 01 2021"
+        ])
+    })
+})

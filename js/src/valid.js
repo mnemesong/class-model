@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
+exports.date = exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
 var util_1 = require("util");
 /**
  * Strict not deep equals to scalar val
@@ -128,10 +128,14 @@ exports.scalar = scalar;
  * Checks is property value is array of X
  */
 function arrayOf(itemValidator) {
+    if (itemValidator === void 0) { itemValidator = null; }
     return function (propName, propLabel, propVal) {
         if (!Array.isArray(propVal)) {
             return ["Property " + propLabel + " should be array, gets "
                     + (typeof propVal)];
+        }
+        if (!itemValidator) {
+            return [];
         }
         var propertiesValidationResult = propVal.reduce(function (acc, el) {
             return (acc.length === 0)
@@ -176,10 +180,14 @@ exports.arrayDeepStrictUnique = arrayDeepStrictUnique;
  * Checks array count by function
  */
 function arrayCount(countCheckFn) {
+    if (countCheckFn === void 0) { countCheckFn = null; }
     return function (propName, propLabel, propVal) {
         if (!Array.isArray(propVal)) {
             return ["Property " + propLabel + " should be array, gets "
                     + (typeof propVal)];
+        }
+        if (!countCheckFn) {
+            return [];
         }
         var arrayCount = propVal.length;
         return (countCheckFn(arrayCount))
@@ -192,10 +200,14 @@ exports.arrayCount = arrayCount;
  * Checks property is a tuple match tuple of validators
  */
 function arrayTuple(valids) {
+    if (valids === void 0) { valids = null; }
     return function (propName, propLabel, propVal) {
         if (!Array.isArray(propVal)) {
             return ["Property " + propLabel + " should be array, gets "
                     + (typeof propVal)];
+        }
+        if (!valids) {
+            return [];
         }
         return valids.reduce(function (acc, el, i) {
             return acc.concat(el(propName, "item of " + propLabel, propVal[i]));
@@ -241,3 +253,25 @@ function not(valid) {
     };
 }
 exports.not = not;
+/**
+ * Date validation by lambda
+ */
+function date(valid) {
+    if (valid === void 0) { valid = null; }
+    return function (propName, propLabel, propVal) {
+        if (!(propVal instanceof Date)) {
+            return ["Property " + propLabel + " is not a Date"];
+        }
+        if (!valid) {
+            return [];
+        }
+        var result = valid(propVal);
+        if (typeof result === "boolean") {
+            return !result
+                ? ["Invalid date value " + propVal.toDateString()]
+                : [];
+        }
+        return result;
+    };
+}
+exports.date = date;

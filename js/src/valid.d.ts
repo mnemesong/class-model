@@ -36,7 +36,7 @@ export declare function scalar(): PropertyValidator;
 /**
  * Checks is property value is array of X
  */
-export declare function arrayOf(itemValidator: PropertyValidator): PropertyValidator;
+export declare function arrayOf(itemValidator?: PropertyValidator | null): PropertyValidator;
 /**
  * Checks is property value is array have n of X values
  */
@@ -44,11 +44,11 @@ export declare function arrayDeepStrictUnique(printVal?: ValuePrinter | null): P
 /**
  * Checks array count by function
  */
-export declare function arrayCount(countCheckFn: ((n: number) => boolean)): PropertyValidator;
+export declare function arrayCount(countCheckFn?: ((n: number) => boolean) | null): PropertyValidator;
 /**
  * Checks property is a tuple match tuple of validators
  */
-export declare function arrayTuple(valids: PropertyValidator[]): PropertyValidator;
+export declare function arrayTuple(valids?: PropertyValidator[] | null): PropertyValidator;
 /**
  * Return errors if one of validators are return errors
  */
@@ -61,3 +61,7 @@ export declare function or(valids: PropertyValidator[]): PropertyValidator;
  * Return errors if everyone of validators are return errors
  */
 export declare function not(valid: PropertyValidator): PropertyValidator;
+/**
+ * Date validation by lambda
+ */
+export declare function date(valid?: ((d: Date) => string[] | boolean) | null): PropertyValidator;

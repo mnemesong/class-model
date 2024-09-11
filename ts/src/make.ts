@@ -43,3 +43,21 @@ export function bigInt(): MakeProperty {
         return BigInt(data)
     }
 }
+
+/**
+ * Constructs Date from loading data
+ */
+export function date(
+    printData: ((v: any) => string)|null = null
+): MakeProperty {
+    return function(data) {
+        const dataObj = (data instanceof Date)
+            ? data
+            : (new Date(data))
+        if(isNaN((dataObj as any))) {
+            throw new Error("Constructs invalid Date from value" 
+                + (!printData ? "" : (": " + printData(data))))
+        }
+        return dataObj
+    }
+}

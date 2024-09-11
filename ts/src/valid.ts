@@ -136,12 +136,15 @@ export function scalar(): PropertyValidator {
  * Checks is property value is array of X
  */
 export function arrayOf(
-    itemValidator: PropertyValidator,
+    itemValidator: PropertyValidator|null = null,
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(!Array.isArray(propVal)) {
             return ["Property " + propLabel + " should be array, gets "
             + (typeof propVal)]
+        }
+        if(!itemValidator) {
+            return []
         }
         const propertiesValidationResult: string[] = propVal.reduce((acc: string[], el) => {
             return (acc.length === 0)
@@ -187,12 +190,15 @@ export function arrayOf(
  * Checks array count by function
  */
 export function arrayCount(
-    countCheckFn: ((n: number) => boolean)
+    countCheckFn: ((n: number) => boolean)|null = null
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(!Array.isArray(propVal)) {
             return ["Property " + propLabel + " should be array, gets "
             + (typeof propVal)]
+        }
+        if(!countCheckFn) {
+            return []
         }
         const arrayCount = propVal.length
         return (countCheckFn(arrayCount))
@@ -205,12 +211,15 @@ export function arrayCount(
  * Checks property is a tuple match tuple of validators
  */
 export function arrayTuple(
-   valids: PropertyValidator[]
+   valids: PropertyValidator[]|null = null
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(!Array.isArray(propVal)) {
             return ["Property " + propLabel + " should be array, gets "
             + (typeof propVal)]
+        }
+        if(!valids) {
+            return []
         }
         return valids.reduce((acc, el, i) => {
             return acc.concat(el(propName, "item of " + propLabel, propVal[i]))
@@ -251,7 +260,7 @@ export function or(
 /**
  * Return errors if everyone of validators are return errors
  */
- export function not(
+export function not(
    valid: PropertyValidator
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
@@ -262,3 +271,25 @@ export function or(
     }
 }
 
+/**
+ * Date validation by lambda
+ */
+export function date(
+   valid: ((d:Date) => string[]|boolean)|null = null
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(!(propVal instanceof Date)) {
+            return ["Property " + propLabel + " is not a Date"];
+        }
+        if(!valid) {
+            return [];
+        }
+        const result = valid(propVal)
+        if(typeof result === "boolean") {
+            return !result
+                ? ["Invalid date value " + propVal.toDateString()]
+                : []
+        }
+        return result
+    }
+}

@@ -11,3 +11,7 @@ export declare function modelsArray(getModel: () => object): MakeProperty;
  * Load bigint
  */
 export declare function bigInt(): MakeProperty;
+/**
+ * Constructs Date from loading data
+ */
+export declare function date(printData?: ((v: any) => string) | null): MakeProperty;

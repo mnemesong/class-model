@@ -86,3 +86,34 @@ var MakeModelsArrayTestClass = /** @class */ (function () {
         assert_1.default.strictEqual(obj.as, undefined);
     });
 });
+var MakeDateTestClass = /** @class */ (function () {
+    function MakeDateTestClass() {
+    }
+    __decorate([
+        (0, src_1.property)("As", src_1.valid.any(), (0, make_1.date)())
+    ], MakeDateTestClass.prototype, "a", void 0);
+    return MakeDateTestClass;
+}());
+(0, mocha_1.describe)("make Date", function () {
+    (0, mocha_1.it)("valid 1", function () {
+        var obj = new MakeDateTestClass();
+        var data = { a: "2022-11-11" };
+        var loadResult = (0, src_1.loadData)(obj, data);
+        assert_1.default.strictEqual(loadResult, true);
+        assert_1.default.strictEqual(obj.a.getFullYear(), 2022);
+    });
+    (0, mocha_1.it)("valid 2", function () {
+        var obj = new MakeDateTestClass();
+        var data = { a: new Date("2022-11-11") };
+        var loadResult = (0, src_1.loadData)(obj, data);
+        assert_1.default.strictEqual(loadResult, true);
+        assert_1.default.strictEqual(obj.a.getFullYear(), 2022);
+    });
+    (0, mocha_1.it)("invalid", function () {
+        var obj = new MakeDateTestClass;
+        var data = { as: "a" };
+        var loadResult = (0, src_1.loadData)(obj, data);
+        assert_1.default.strictEqual(loadResult, false);
+        assert_1.default.strictEqual(obj.a, undefined);
+    });
+});

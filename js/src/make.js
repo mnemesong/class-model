@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bigInt = exports.modelsArray = exports.model = void 0;
+exports.date = exports.bigInt = exports.modelsArray = exports.model = void 0;
 var _1 = require(".");
 /**
  * Load model uses getter
@@ -44,3 +44,20 @@ function bigInt() {
     };
 }
 exports.bigInt = bigInt;
+/**
+ * Constructs Date from loading data
+ */
+function date(printData) {
+    if (printData === void 0) { printData = null; }
+    return function (data) {
+        var dataObj = (data instanceof Date)
+            ? data
+            : (new Date(data));
+        if (isNaN(dataObj)) {
+            throw new Error("Constructs invalid Date from value"
+                + (!printData ? "" : (": " + printData(data))));
+        }
+        return dataObj;
+    };
+}
+exports.date = date;
