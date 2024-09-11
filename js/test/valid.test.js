@@ -286,3 +286,82 @@ var ArrayTupleCheckClass = /** @class */ (function () {
         ]);
     });
 });
+var AndCheckClass = /** @class */ (function () {
+    function AndCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", [valid.and([
+                valid.scalar(),
+                valid.strictDeepEqual(12, function (v) { return JSON.stringify(v); }),
+            ])])
+    ], AndCheckClass.prototype, "a", void 0);
+    return AndCheckClass;
+}());
+(0, mocha_1.describe)("and", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new AndCheckClass();
+        obj.a = 12;
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid", function () {
+        var obj = new AndCheckClass();
+        obj.a = "12";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A should be equals to 12, but actual it is \"12\""
+        ]);
+    });
+});
+var OrCheckClass = /** @class */ (function () {
+    function OrCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", [valid.or([
+                valid.strictEqual("twelve"),
+                valid.strictDeepEqual(12),
+            ])])
+    ], OrCheckClass.prototype, "a", void 0);
+    return OrCheckClass;
+}());
+(0, mocha_1.describe)("or", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new OrCheckClass();
+        obj.a = 12;
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid", function () {
+        var obj = new OrCheckClass();
+        obj.a = "12";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A should be equals to \"twelve\"",
+            "A should be equals to special value",
+        ]);
+    });
+});
+var NotCheckClass = /** @class */ (function () {
+    function NotCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", [valid.not(valid.strictEqual("twelve"))])
+    ], NotCheckClass.prototype, "a", void 0);
+    return NotCheckClass;
+}());
+(0, mocha_1.describe)("not", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new NotCheckClass();
+        obj.a = 12;
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid", function () {
+        var obj = new NotCheckClass();
+        obj.a = "twelve";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "Value allows condition, thats should not"
+        ]);
+    });
+});

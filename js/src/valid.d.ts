@@ -49,3 +49,15 @@ export declare function arrayCount(countCheckFn: ((n: number) => boolean)): Prop
  * Checks property is a tuple match tuple of validators
  */
 export declare function arrayTuple(valids: PropertyValidator[]): PropertyValidator;
+/**
+ * Return errors if one of validators are return errors
+ */
+export declare function and(valids: PropertyValidator[]): PropertyValidator;
+/**
+* Return errors if everyone of validators are return errors
+*/
+export declare function or(valids: PropertyValidator[]): PropertyValidator;
+/**
+ * Return errors if everyone of validators are return errors
+ */
+export declare function not(valid: PropertyValidator): PropertyValidator;

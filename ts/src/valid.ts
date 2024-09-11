@@ -189,7 +189,7 @@ export function arrayOf(
  */
 export function arrayCount(
     countCheckFn: ((n: number) => boolean)
- ): PropertyValidator {
+): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(!Array.isArray(propVal)) {
             return ["Property " + propLabel + " should be array, gets "
@@ -200,14 +200,14 @@ export function arrayCount(
             ? []
             : [propLabel + " contains array invalid count of items: " + arrayCount];
     }
- }
+}
 
- /**
-  * Checks property is a tuple match tuple of validators
-  */
- export function arrayTuple(
-    valids: PropertyValidator[]
- ): PropertyValidator {
+/**
+ * Checks property is a tuple match tuple of validators
+ */
+export function arrayTuple(
+   valids: PropertyValidator[]
+): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(!Array.isArray(propVal)) {
             return ["Property " + propLabel + " should be array, gets "
@@ -218,4 +218,48 @@ export function arrayCount(
         }, [])
             .map(err => "In property A tuple: " + err)
     }
- }
+}
+
+/**
+ * Return errors if one of validators are return errors
+ */
+export function and(
+   valids: PropertyValidator[]
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        return valids.reduce((acc: string[], el) => {
+            return el(propName, propLabel, propVal)
+        }, [])
+    }
+}
+
+/**
+ * Return errors if everyone of validators are return errors
+ */
+export function or(
+   valids: PropertyValidator[]
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        const validResult = valids.map(v => {
+            return v(propName, propLabel, propVal)
+        })
+        return (validResult.findIndex((errs) => errs.length === 0) === -1)
+            ? validResult.reduce((acc, el) => acc.concat(el), [])
+            : []
+    }
+}
+
+/**
+ * Return errors if everyone of validators are return errors
+ */
+ export function not(
+   valid: PropertyValidator
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        const validResult = valid(propName, propLabel, propVal)
+        return (validResult.length === 0)
+            ? ["Value allows condition, thats should not"]
+            : []
+    }
+}
+

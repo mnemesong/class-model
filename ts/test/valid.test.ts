@@ -244,3 +244,81 @@ describe("arrayTuple", () => {
         ])
     })
 })
+
+class AndCheckClass {
+    @property("A", [valid.and([
+        valid.scalar(),
+        valid.strictDeepEqual(12, (v) => JSON.stringify(v)),
+    ])])
+    public a: any
+}
+
+describe("and", () => {
+    it("valid", () => {
+        const obj = new AndCheckClass()
+        obj.a = 12
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid", () => {
+        const obj = new AndCheckClass()
+        obj.a = "12"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A should be equals to 12, but actual it is \"12\""
+        ])
+    })
+})
+
+class OrCheckClass {
+    @property("A", [valid.or([
+        valid.strictEqual("twelve"),
+        valid.strictDeepEqual(12),
+    ])])
+    public a: any
+}
+
+describe("or", () => {
+    it("valid", () => {
+        const obj = new OrCheckClass()
+        obj.a = 12
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid", () => {
+        const obj = new OrCheckClass()
+        obj.a = "12"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A should be equals to \"twelve\"",
+            "A should be equals to special value",
+        ])
+    })
+})
+
+class NotCheckClass {
+    @property("A", [valid.not(
+        valid.strictEqual("twelve"),
+    )])
+    public a: any
+}
+
+describe("not", () => {
+    it("valid", () => {
+        const obj = new NotCheckClass()
+        obj.a = 12
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid", () => {
+        const obj = new NotCheckClass()
+        obj.a = "twelve"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "Value allows condition, thats should not"
+        ])
+    })
+})

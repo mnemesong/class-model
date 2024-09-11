@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
+exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
 var util_1 = require("util");
 /**
  * Strict not deep equals to scalar val
@@ -204,3 +204,40 @@ function arrayTuple(valids) {
     };
 }
 exports.arrayTuple = arrayTuple;
+/**
+ * Return errors if one of validators are return errors
+ */
+function and(valids) {
+    return function (propName, propLabel, propVal) {
+        return valids.reduce(function (acc, el) {
+            return el(propName, propLabel, propVal);
+        }, []);
+    };
+}
+exports.and = and;
+/**
+* Return errors if everyone of validators are return errors
+*/
+function or(valids) {
+    return function (propName, propLabel, propVal) {
+        var validResult = valids.map(function (v) {
+            return v(propName, propLabel, propVal);
+        });
+        return (validResult.findIndex(function (errs) { return errs.length === 0; }) === -1)
+            ? validResult.reduce(function (acc, el) { return acc.concat(el); }, [])
+            : [];
+    };
+}
+exports.or = or;
+/**
+ * Return errors if everyone of validators are return errors
+ */
+function not(valid) {
+    return function (propName, propLabel, propVal) {
+        var validResult = valid(propName, propLabel, propVal);
+        return (validResult.length === 0)
+            ? ["Value allows condition, thats should not"]
+            : [];
+    };
+}
+exports.not = not;

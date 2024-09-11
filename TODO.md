@@ -15,11 +15,10 @@
         + scalar
         + never
         + any
-    - modifiers
-        - and
-        - or
-        - promise
-        - not
+    + modifiers
+        + and
+        + or
+        + not
     - date
         - dateMax
         - dateMin
