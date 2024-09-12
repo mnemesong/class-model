@@ -17,6 +17,10 @@ export declare function required(): PropertyValidator;
  */
 export declare function empty(): PropertyValidator;
 /**
+ * Value satisfies filter function
+ */
+export declare function filterFn(filterFn: (v: any) => boolean): PropertyValidator;
+/**
  * Deep strict equals validator
  */
 export declare function oneOf(vals: Array<any>, printValue?: ValuePrinter | null): PropertyValidator;
@@ -85,3 +89,15 @@ export declare function objHasKeys(keys: (string | symbol)[]): PropertyValidator
  * Checks object values by structure of validators
  */
 export declare function objProps(propValidators: Record<string | symbol, PropertyValidator>): PropertyValidator;
+/**
+ * Validate string by lambda
+ */
+export declare function string(valid?: ((s: string) => string[] | boolean) | null): PropertyValidator;
+/**
+ * Validate string by lambda
+ */
+export declare function stringLength(valid?: ((s: number) => string[] | boolean) | null): PropertyValidator;
+/**
+ * Validate string by lambda
+ */
+export declare function stringRegMatch(regex: RegExp | string): PropertyValidator;

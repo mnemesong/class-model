@@ -533,3 +533,95 @@ describe("objProps", () => {
         ])
     })
 })
+
+class StringCheckClass {
+    @property("A", valid.string(
+        (s) => (s.includes("!!") ? [] : ["string is not enought expressive"]),
+    ))
+    public a: any
+}
+
+describe("string", () => {
+    it("valid", () => {
+        const obj = new StringCheckClass()
+        obj.a = "WRAAAAGH!!"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid 1", () => {
+        const obj = new StringCheckClass()
+        obj.a = "wraagh!"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "In property A: string is not enought expressive"
+        ])
+    })
+
+    it("invalid 2", () => {
+        const obj = new StringCheckClass()
+        obj.a = 12
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "Property A is not a string"
+        ])
+    })
+})
+
+class StringLenCheckClass {
+    @property("A", valid.stringLength(
+        (n) => ((n % 2 === 0)),
+    ))
+    public a: any
+}
+
+describe("stringLength", () => {
+    it("valid", () => {
+        const obj = new StringLenCheckClass()
+        obj.a = "12121212"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid 1", () => {
+        const obj = new StringLenCheckClass()
+        obj.a = "1212121"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A is invalid length of string value \"1212121\""
+        ])
+    })
+
+    it("invalid 2", () => {
+        const obj = new StringLenCheckClass()
+        obj.a = {}
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "Property A is not a string"
+        ])
+    })
+})
+
+class StringRegexCheckClass {
+    @property("A", valid.stringRegMatch(/[A]+!/i))
+    public a: any
+}
+
+describe("stringRegEx", () => {
+    it("valid", () => {
+        const obj = new StringRegexCheckClass()
+        obj.a = "AAAA!"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid 1", () => {
+        const obj = new StringRegexCheckClass()
+        obj.a = "Aaaa"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "In property A string \"Aaaa\" is not metch regular expression " 
+                + "/[A]+!/i"
+        ])
+    })
+})

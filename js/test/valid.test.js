@@ -573,7 +573,96 @@ var ObjPropsCheckClass = /** @class */ (function () {
         obj.a = obj.a = (_a = { a: 12 }, _a[symB] = [0, 0, 0], _a);
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
-            "A should contains key Symbol(B)"
+            "A contains object, checks by property: Symbol(B) contains array invalid count of items: 3"
+        ]);
+    });
+});
+var StringCheckClass = /** @class */ (function () {
+    function StringCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", valid.string(function (s) { return (s.includes("!!") ? [] : ["string is not enought expressive"]); }))
+    ], StringCheckClass.prototype, "a", void 0);
+    return StringCheckClass;
+}());
+(0, mocha_1.describe)("string", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new StringCheckClass();
+        obj.a = "WRAAAAGH!!";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid 1", function () {
+        var obj = new StringCheckClass();
+        obj.a = "wraagh!";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "In property A: string is not enought expressive"
+        ]);
+    });
+    (0, mocha_1.it)("invalid 2", function () {
+        var obj = new StringCheckClass();
+        obj.a = 12;
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "Property A is not a string"
+        ]);
+    });
+});
+var StringLenCheckClass = /** @class */ (function () {
+    function StringLenCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", valid.stringLength(function (n) { return ((n % 2 === 0)); }))
+    ], StringLenCheckClass.prototype, "a", void 0);
+    return StringLenCheckClass;
+}());
+(0, mocha_1.describe)("stringLength", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new StringLenCheckClass();
+        obj.a = "12121212";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid 1", function () {
+        var obj = new StringLenCheckClass();
+        obj.a = "1212121";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A is invalid length of string value \"1212121\""
+        ]);
+    });
+    (0, mocha_1.it)("invalid 2", function () {
+        var obj = new StringLenCheckClass();
+        obj.a = {};
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "Property A is not a string"
+        ]);
+    });
+});
+var StringRegexCheckClass = /** @class */ (function () {
+    function StringRegexCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", valid.stringRegMatch(/[A]+!/i))
+    ], StringRegexCheckClass.prototype, "a", void 0);
+    return StringRegexCheckClass;
+}());
+(0, mocha_1.describe)("stringRegEx", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new StringRegexCheckClass();
+        obj.a = "AAAA!";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid 1", function () {
+        var obj = new StringRegexCheckClass();
+        obj.a = "Aaaa";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "In property A string \"Aaaa\" is not metch regular expression "
+                + "/[A]+!/i"
         ]);
     });
 });

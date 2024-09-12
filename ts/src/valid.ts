@@ -329,6 +329,7 @@ export function number(
                 : []
         }
         return result
+            .map(err => "In property " + propLabel + ": " + err)
     }
 }
 
@@ -408,5 +409,75 @@ export function objInstance(
                     .concat(propValidators[k](k, getPropertyLabel(propVal, k), propVal[k]))
             }, [])
             .map(err => propLabel + " contains object, checks by property: " + err)
+    }
+}
+
+/**
+ * Validate string by lambda
+ */
+ export function string(
+    valid: ((s: string) => string[]|boolean)|null = null
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(typeof propVal !== "string") {
+            return ["Property " + propLabel + " is not a string"];
+        }
+        if(!valid) {
+            return [];
+        }
+        const result = valid(propVal)
+        if(typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid string value " + JSON.stringify(propVal)]
+                : []
+        }
+        return result
+            .map(err => "In property " + propLabel + ": " + err)
+    }
+}
+
+/**
+ * Validate string by lambda
+ */
+ export function stringLength(
+    valid: ((s: number) => string[]|boolean)|null = null
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(typeof propVal !== "string") {
+            return ["Property " + propLabel + " is not a string"];
+        }
+        if(!valid) {
+            return [];
+        }
+        const result = valid(propVal.length)
+        if(typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid length of string value " + JSON.stringify(propVal)]
+                : []
+        }
+        return result
+            .map(err => "In property " + propLabel + ": " + err)
+    }
+}
+
+/**
+ * Validate string by lambda
+ */
+ export function stringRegMatch(
+    regex: RegExp|string
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(typeof propVal !== "string") {
+            return ["Property " + propLabel + " is not a string"];
+        }
+        const result = propVal.match(regex)
+        if(!!result && (result.length > 0)) {
+            return []
+        }
+        return (!!result && (result.length > 0))
+            ? []
+            : ["In property " + propLabel + " string \"" + propVal 
+                + "\" is not metch regular expression " 
+                + ((typeof regex === "string") ? regex : regex.toString())]
     }
 }

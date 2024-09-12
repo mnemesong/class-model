@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.objProps = exports.objHasKeys = exports.objValidModel = exports.objInstance = exports.number = exports.date = exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
+exports.stringRegMatch = exports.stringLength = exports.string = exports.objProps = exports.objHasKeys = exports.objValidModel = exports.objInstance = exports.number = exports.date = exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.filterFn = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
 var util_1 = require("util");
 var _1 = require(".");
 var utils_1 = require("./utils");
@@ -57,6 +57,17 @@ function empty() {
     };
 }
 exports.empty = empty;
+/**
+ * Value satisfies filter function
+ */
+function filterFn(filterFn) {
+    return function (propName, propLabel, propVal) {
+        return (!filterFn(propVal))
+            ? [propLabel + " should match filter function"]
+            : [];
+    };
+}
+exports.filterFn = filterFn;
 /**
  * Deep strict equals validator
  */
@@ -295,7 +306,8 @@ function number(valid) {
                 ? [propLabel + " is invalid number value " + JSON.stringify(propVal)]
                 : [];
         }
-        return result;
+        return result
+            .map(function (err) { return "In property " + propLabel + ": " + err; });
     };
 }
 exports.number = number;
@@ -375,3 +387,69 @@ function objProps(propValidators) {
     };
 }
 exports.objProps = objProps;
+/**
+ * Validate string by lambda
+ */
+function string(valid) {
+    if (valid === void 0) { valid = null; }
+    return function (propName, propLabel, propVal) {
+        if (typeof propVal !== "string") {
+            return ["Property " + propLabel + " is not a string"];
+        }
+        if (!valid) {
+            return [];
+        }
+        var result = valid(propVal);
+        if (typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid string value " + JSON.stringify(propVal)]
+                : [];
+        }
+        return result
+            .map(function (err) { return "In property " + propLabel + ": " + err; });
+    };
+}
+exports.string = string;
+/**
+ * Validate string by lambda
+ */
+function stringLength(valid) {
+    if (valid === void 0) { valid = null; }
+    return function (propName, propLabel, propVal) {
+        if (typeof propVal !== "string") {
+            return ["Property " + propLabel + " is not a string"];
+        }
+        if (!valid) {
+            return [];
+        }
+        var result = valid(propVal.length);
+        if (typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid length of string value " + JSON.stringify(propVal)]
+                : [];
+        }
+        return result
+            .map(function (err) { return "In property " + propLabel + ": " + err; });
+    };
+}
+exports.stringLength = stringLength;
+/**
+ * Validate string by lambda
+ */
+function stringRegMatch(regex) {
+    return function (propName, propLabel, propVal) {
+        if (typeof propVal !== "string") {
+            return ["Property " + propLabel + " is not a string"];
+        }
+        var result = propVal.match(regex);
+        if (!!result && (result.length > 0)) {
+            return [];
+        }
+        return (!!result && (result.length > 0))
+            ? []
+            : ["In property " + propLabel + " string \"" + propVal
+                    + "\" is not metch regular expression "
+                    + ((typeof regex === "string") ? regex : regex.toString())];
+    };
+}
+exports.stringRegMatch = stringRegMatch;
