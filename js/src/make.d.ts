@@ -23,3 +23,7 @@ export declare function float(printData?: ((v: any) => string) | null): MakeProp
  * Parse data as a Float
  */
 export declare function int(printData?: ((v: any) => string) | null, roundStrategy?: "round" | "floor" | "ceil"): MakeProperty;
+/**
+ * Parse data as a boolean
+ */
+export declare function boolean(): MakeProperty;

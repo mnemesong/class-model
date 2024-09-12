@@ -101,3 +101,31 @@ export declare function stringLength(valid?: ((s: number) => string[] | boolean)
  * Validate string by lambda
  */
 export declare function stringRegMatch(regex: RegExp | string): PropertyValidator;
+/**
+ * Validate string by lambda
+ */
+export declare function stringUuid(): PropertyValidator;
+/**
+ * Validate boolean value
+ */
+export declare function boolean(valid?: ((s: boolean) => string[] | boolean) | null): PropertyValidator;
+/**
+ * validate Symbol value
+ */
+export declare function symbol(valid?: ((s: symbol) => string[] | boolean) | null): PropertyValidator;
+/**
+ * Validate value is Null
+ */
+export declare function isNull(): PropertyValidator;
+/**
+ * Validate value is Undefined
+ */
+export declare function isUndefined(): PropertyValidator;
+/**
+ * Validate value is function
+ */
+export declare function func(valid?: ((s: Function) => string[] | boolean) | null): PropertyValidator;
+/**
+ * Validate value by lambda
+ */
+export declare function lambda(valid: (a: any) => boolean | string[]): PropertyValidator;

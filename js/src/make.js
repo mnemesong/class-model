@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.int = exports.float = exports.date = exports.bigInt = exports.modelsArray = exports.model = void 0;
+exports.boolean = exports.int = exports.float = exports.date = exports.bigInt = exports.modelsArray = exports.model = void 0;
 var _1 = require(".");
 /**
  * Load model uses getter
@@ -125,3 +125,12 @@ function int(printData, roundStrategy) {
     };
 }
 exports.int = int;
+/**
+ * Parse data as a boolean
+ */
+function boolean() {
+    return function (data) {
+        return !!data;
+    };
+}
+exports.boolean = boolean;

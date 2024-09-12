@@ -1,6 +1,7 @@
 import { describe, it } from "mocha";
 import { property, validationErrors } from "../src";
 import * as valid from "../src/valid";
+import { isHexColor } from "validator"
 import assert from "assert";
 
 class StrictEqualCheckClass {
@@ -622,6 +623,29 @@ describe("stringRegEx", () => {
         assert.deepStrictEqual(validErrors, [
             "In property A string \"Aaaa\" is not metch regular expression " 
                 + "/[A]+!/i"
+        ])
+    })
+})
+
+class LambdaCheckClass {
+    @property("A", valid.lambda(isHexColor))
+    public a: any
+}
+
+describe("lambda", () => {
+    it("valid", () => {
+        const obj = new LambdaCheckClass()
+        obj.a = "#763820"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid 1", () => {
+        const obj = new LambdaCheckClass()
+        obj.a = "c124c13"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A is invalid value"
         ])
     })
 })

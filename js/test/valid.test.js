@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mocha_1 = require("mocha");
 var src_1 = require("../src");
 var valid = __importStar(require("../src/valid"));
+var validator_1 = require("validator");
 var assert_1 = __importDefault(require("assert"));
 var StrictEqualCheckClass = /** @class */ (function () {
     function StrictEqualCheckClass() {
@@ -663,6 +664,30 @@ var StringRegexCheckClass = /** @class */ (function () {
         assert_1.default.deepStrictEqual(validErrors, [
             "In property A string \"Aaaa\" is not metch regular expression "
                 + "/[A]+!/i"
+        ]);
+    });
+});
+var LambdaCheckClass = /** @class */ (function () {
+    function LambdaCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", valid.lambda(validator_1.isHexColor))
+    ], LambdaCheckClass.prototype, "a", void 0);
+    return LambdaCheckClass;
+}());
+(0, mocha_1.describe)("lambda", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new LambdaCheckClass();
+        obj.a = "#763820";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid 1", function () {
+        var obj = new LambdaCheckClass();
+        obj.a = "c124c13";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A is invalid value"
         ]);
     });
 });

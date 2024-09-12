@@ -127,3 +127,12 @@ export function float(
         return number
     }
 }
+
+/**
+ * Parse data as a boolean
+ */
+ export function boolean(): MakeProperty {
+    return function(data) {
+        return !!data
+    }
+}

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.stringRegMatch = exports.stringLength = exports.string = exports.objProps = exports.objHasKeys = exports.objValidModel = exports.objInstance = exports.number = exports.date = exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.filterFn = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
+exports.lambda = exports.func = exports.isUndefined = exports.isNull = exports.symbol = exports.boolean = exports.stringUuid = exports.stringRegMatch = exports.stringLength = exports.string = exports.objProps = exports.objHasKeys = exports.objValidModel = exports.objInstance = exports.number = exports.date = exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.filterFn = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
 var util_1 = require("util");
 var _1 = require(".");
 var utils_1 = require("./utils");
@@ -453,3 +453,118 @@ function stringRegMatch(regex) {
     };
 }
 exports.stringRegMatch = stringRegMatch;
+/**
+ * Validate string by lambda
+ */
+function stringUuid() {
+    return stringRegMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+}
+exports.stringUuid = stringUuid;
+/**
+ * Validate boolean value
+ */
+function boolean(valid) {
+    if (valid === void 0) { valid = null; }
+    return function (propName, propLabel, propVal) {
+        if (typeof propVal !== "boolean") {
+            return ["Property " + propLabel + " is not a boolean"];
+        }
+        if (!valid) {
+            return [];
+        }
+        var result = valid(propVal);
+        if (typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid boolean value " + JSON.stringify(propVal)]
+                : [];
+        }
+        return result
+            .map(function (err) { return "In property " + propLabel + ": " + err; });
+    };
+}
+exports.boolean = boolean;
+/**
+ * validate Symbol value
+ */
+function symbol(valid) {
+    if (valid === void 0) { valid = null; }
+    return function (propName, propLabel, propVal) {
+        if (typeof propVal !== "symbol") {
+            return ["Property " + propLabel + " is not a symbol"];
+        }
+        if (!valid) {
+            return [];
+        }
+        var result = valid(propVal);
+        if (typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid symbol value " + propVal.toString()]
+                : [];
+        }
+        return result
+            .map(function (err) { return "In property " + propLabel + ": " + err; });
+    };
+}
+exports.symbol = symbol;
+/**
+ * Validate value is Null
+ */
+function isNull() {
+    return function (propName, propLabel, propVal) {
+        if (propVal !== null) {
+            return ["Property " + propLabel + " is not a null"];
+        }
+        return [];
+    };
+}
+exports.isNull = isNull;
+/**
+ * Validate value is Undefined
+ */
+function isUndefined() {
+    return function (propName, propLabel, propVal) {
+        if (propVal !== undefined) {
+            return ["Property " + propLabel + " is not a undefined"];
+        }
+        return [];
+    };
+}
+exports.isUndefined = isUndefined;
+/**
+ * Validate value is function
+ */
+function func(valid) {
+    if (valid === void 0) { valid = null; }
+    return function (propName, propLabel, propVal) {
+        if (typeof propVal !== "function") {
+            return ["Property " + propLabel + " is not a function"];
+        }
+        if (!valid) {
+            return [];
+        }
+        var result = valid(propVal);
+        if (typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid function value " + propVal.toString()]
+                : [];
+        }
+        return result
+            .map(function (err) { return "In property " + propLabel + ": " + err; });
+    };
+}
+exports.func = func;
+/**
+ * Validate value by lambda
+ */
+function lambda(valid) {
+    return function (propName, propLabel, propVal) {
+        var result = valid(propVal);
+        if (typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid value"]
+                : [];
+        }
+        return result;
+    };
+}
+exports.lambda = lambda;

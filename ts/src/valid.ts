@@ -481,3 +481,125 @@ export function objInstance(
                 + ((typeof regex === "string") ? regex : regex.toString())]
     }
 }
+
+/**
+ * Validate string by lambda
+ */
+ export function stringUuid(): PropertyValidator {
+    return stringRegMatch(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    )
+}
+
+/**
+ * Validate boolean value
+ */
+export function boolean(
+    valid: ((s: boolean) => string[]|boolean)|null = null
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(typeof propVal !== "boolean") {
+            return ["Property " + propLabel + " is not a boolean"];
+        }
+        if(!valid) {
+            return [];
+        }
+        const result = valid(propVal)
+        if(typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid boolean value " + JSON.stringify(propVal)]
+                : []
+        }
+        return result
+            .map(err => "In property " + propLabel + ": " + err)
+    }
+}
+
+/**
+ * validate Symbol value
+ */
+export function symbol(
+    valid: ((s: symbol) => string[]|boolean)|null = null
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(typeof propVal !== "symbol") {
+            return ["Property " + propLabel + " is not a symbol"];
+        }
+        if(!valid) {
+            return [];
+        }
+        const result = valid(propVal)
+        if(typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid symbol value " + propVal.toString()]
+                : []
+        }
+        return result
+            .map(err => "In property " + propLabel + ": " + err)
+    }
+}
+
+/**
+ * Validate value is Null
+ */
+export function isNull(): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(propVal !== null) {
+            return ["Property " + propLabel + " is not a null"];
+        }
+        return []
+    }
+}
+
+/**
+ * Validate value is Undefined
+ */
+export function isUndefined(): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(propVal !== undefined) {
+            return ["Property " + propLabel + " is not a undefined"];
+        }
+        return []
+    }
+}
+
+/**
+ * Validate value is function
+ */
+export function func(
+    valid: ((s: Function) => string[]|boolean)|null = null
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(typeof propVal !== "function") {
+            return ["Property " + propLabel + " is not a function"];
+        }
+        if(!valid) {
+            return [];
+        }
+        const result = valid(propVal)
+        if(typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid function value " + propVal.toString()]
+                : []
+        }
+        return result
+            .map(err => "In property " + propLabel + ": " + err)
+    }
+}
+
+/**
+ * Validate value by lambda
+ */
+export function lambda(
+    valid: (a: any) => boolean|string[],
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        const result = valid(propVal)
+        if(typeof result === "boolean") {
+            return !result
+                ? [propLabel + " is invalid value"]
+                : []
+        }
+        return result
+    }
+}
