@@ -1,6 +1,8 @@
 import { isDeepStrictEqual } from "util"
+import { validationErrors } from "."
+import { getPropertyLabel } from "./utils"
 
-export type PropertyValidator = (propName: string, propLabel: string, propVal: any) => string[]
+export type PropertyValidator = (propName: string|symbol, propLabel: string, propVal: any) => string[]
 
 export type ValuePrinter = (v: any) => string
 
@@ -58,6 +60,19 @@ export function required(): PropertyValidator {
         return (!propVal)
             ? []
             : [propLabel + " should be empty"]
+    }
+}
+
+/**
+ * Value satisfies filter function
+ */
+ export function filterFn(
+    filterFn: (v: any) => boolean
+ ): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        return (!filterFn(propVal))
+            ? [propLabel + " should match filter function"]
+            : []
     }
 }
 
@@ -294,6 +309,9 @@ export function date(
     }
 }
 
+/**
+ * Validate number by lambda
+ */
 export function number(
     valid: ((n: number) => string[]|boolean)|null = null
 ): PropertyValidator {
@@ -311,5 +329,84 @@ export function number(
                 : []
         }
         return result
+    }
+}
+
+/**
+ * Checks object is instance of X
+ */
+export function objInstance(
+    construct: Function|null = null
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        const className = !construct ? "object" : construct.name
+        if(typeof propVal !== "object") {
+            return [propLabel + " should be object, gets " + (typeof propVal)]
+        }
+        if(!construct) {
+            return []
+        }
+        if(!(propVal instanceof construct)) {
+            return [propLabel + " should be instance of " + className
+                + ", gets instance of " + propVal.constructor.name]
+        }
+        return []
+    }
+}
+
+/**
+ * Checks object is valid as a Model
+ */
+ export function objValidModel(): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(typeof propVal !== "object") {
+            return [propLabel + " should be object, gets " + (typeof propVal)]
+        }
+        return validationErrors(propVal)
+            .map(err => propLabel + " should be valid Model, but in it: " + err)
+    }
+}
+
+/**
+ * Checks object has keys
+ */
+ export function objHasKeys(keys: (string|symbol)[]): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(typeof propVal !== "object") {
+            return [propLabel + " should be object, gets " + (typeof propVal)]
+        }
+        const objectKeys = Object.getOwnPropertyNames(propVal)
+        const objectOwnPropSymbols = Object.getOwnPropertySymbols(propVal)
+        return keys.reduce((errs: string[], k) => {
+            return (typeof k === "symbol")
+                ? (objectOwnPropSymbols.includes(k)
+                    ? errs
+                    : errs.concat([propLabel + " should contains key " + k.toString()]))
+                : (objectKeys.includes(k)
+                    ? errs
+                    : errs.concat([propLabel + " should contains key " + k]))
+        }, [])
+    }
+}
+
+/**
+ * Checks object values by structure of validators
+ */
+ export function objProps(
+    propValidators: Record<string|symbol, PropertyValidator>
+): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(typeof propVal !== "object") {
+            return [propLabel + " should be object, gets " + (typeof propVal)]
+        }
+        const objectKeys = Object.getOwnPropertyNames(propVal)
+        const objectOwnPropSymbols = Object.getOwnPropertySymbols(propVal)
+        return (Object.getOwnPropertyNames(propValidators) as (string|symbol)[])
+            .concat(Object.getOwnPropertySymbols(propValidators))
+            .reduce((errs: string[], k) => {
+                return errs
+                    .concat(propValidators[k](k, getPropertyLabel(propVal, k), propVal[k]))
+            }, [])
+            .map(err => propLabel + " contains object, checks by property: " + err)
     }
 }

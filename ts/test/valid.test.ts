@@ -399,3 +399,137 @@ describe("number", () => {
         ])
     })
 })
+
+class ObjInstanceCheckClass {
+    @property("A", valid.objInstance(Map))
+    public a: any
+}
+
+describe("objInstance", () => {
+    it("valid", () => {
+        const obj = new ObjInstanceCheckClass()
+        obj.a = new Map()
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid 1", () => {
+        const obj = new ObjInstanceCheckClass()
+        obj.a = "sada"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A should be object, gets string"
+        ])
+    })
+
+    it("invalid 2", () => {
+        const obj = new ObjInstanceCheckClass()
+        obj.a = Array()
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A should be instance of Map, gets instance of Array"
+        ])
+    })
+})
+
+class ObjValidModelCheckClass {
+    @property("A", valid.objValidModel())
+    public a: any
+}
+
+describe("objValidModel", () => {
+    it("valid", () => {
+        const obj = new ObjValidModelCheckClass()
+        obj.a = new NumberCheckClass()
+        obj.a.a = 12
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid 1", () => {
+        const obj = new ObjValidModelCheckClass()
+        obj.a = "sada"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A should be object, gets string"
+        ])
+    })
+
+    it("invalid 2", () => {
+        const obj = new ObjValidModelCheckClass()
+        obj.a = new NumberCheckClass()
+        obj.a.a = "a"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A should be valid Model, but in it: Property A is not a number"
+        ])
+    })
+})
+
+const symB = Symbol("B")
+class ObjHasKeysCheckClass {
+    @property("A", valid.objHasKeys(["a", symB]))
+    public a: any
+}
+
+describe("objHasKeys", () => {
+    it("valid", () => {
+        const obj = new ObjHasKeysCheckClass()
+        obj.a = {a: 12, [symB]: "asd"}
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid 1", () => {
+        const obj = new ObjHasKeysCheckClass()
+        obj.a = "sada"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A should be object, gets string"
+        ])
+    })
+
+    it("invalid 2", () => {
+        const obj = new ObjHasKeysCheckClass()
+        obj.a = obj.a = {a: 12, [Symbol("B")]: "asd"}
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A should contains key Symbol(B)"
+        ])
+    })
+})
+
+class ObjPropsCheckClass {
+    @property("A", valid.objProps({
+        a: valid.strictEqual(12),
+        [symB]: valid.arrayCount((n) => n === 2)
+    }))
+    public a: any
+}
+
+describe("objProps", () => {
+    it("valid", () => {
+        const obj = new ObjPropsCheckClass()
+        obj.a = {a: 12, [symB]: [0, 0]}
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [])
+    })
+
+    it("invalid 1", () => {
+        const obj = new ObjPropsCheckClass()
+        obj.a = "sada"
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A should be object, gets string"
+        ])
+    })
+
+    it("invalid 2", () => {
+        const obj = new ObjPropsCheckClass()
+        obj.a = obj.a = {a: 12, [symB]: [0, 0, 0]}
+        const validErrors = validationErrors(obj)
+        assert.deepStrictEqual(validErrors, [
+            "A contains object, checks by property: Symbol(B) contains array invalid count of items: 3"
+        ])
+    })
+})

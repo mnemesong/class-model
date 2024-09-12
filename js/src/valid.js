@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.number = exports.date = exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
+exports.objProps = exports.objHasKeys = exports.objValidModel = exports.objInstance = exports.number = exports.date = exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
 var util_1 = require("util");
+var _1 = require(".");
+var utils_1 = require("./utils");
 /**
  * Strict not deep equals to scalar val
  */
@@ -275,6 +277,9 @@ function date(valid) {
     };
 }
 exports.date = date;
+/**
+ * Validate number by lambda
+ */
 function number(valid) {
     if (valid === void 0) { valid = null; }
     return function (propName, propLabel, propVal) {
@@ -294,3 +299,79 @@ function number(valid) {
     };
 }
 exports.number = number;
+/**
+ * Checks object is instance of X
+ */
+function objInstance(construct) {
+    if (construct === void 0) { construct = null; }
+    return function (propName, propLabel, propVal) {
+        var className = !construct ? "object" : construct.name;
+        if (typeof propVal !== "object") {
+            return [propLabel + " should be object, gets " + (typeof propVal)];
+        }
+        if (!construct) {
+            return [];
+        }
+        if (!(propVal instanceof construct)) {
+            return [propLabel + " should be instance of " + className
+                    + ", gets instance of " + propVal.constructor.name];
+        }
+        return [];
+    };
+}
+exports.objInstance = objInstance;
+/**
+ * Checks object is valid as a Model
+ */
+function objValidModel() {
+    return function (propName, propLabel, propVal) {
+        if (typeof propVal !== "object") {
+            return [propLabel + " should be object, gets " + (typeof propVal)];
+        }
+        return (0, _1.validationErrors)(propVal)
+            .map(function (err) { return propLabel + " should be valid Model, but in it: " + err; });
+    };
+}
+exports.objValidModel = objValidModel;
+/**
+ * Checks object has keys
+ */
+function objHasKeys(keys) {
+    return function (propName, propLabel, propVal) {
+        if (typeof propVal !== "object") {
+            return [propLabel + " should be object, gets " + (typeof propVal)];
+        }
+        var objectKeys = Object.getOwnPropertyNames(propVal);
+        var objectOwnPropSymbols = Object.getOwnPropertySymbols(propVal);
+        return keys.reduce(function (errs, k) {
+            return (typeof k === "symbol")
+                ? (objectOwnPropSymbols.includes(k)
+                    ? errs
+                    : errs.concat([propLabel + " should contains key " + k.toString()]))
+                : (objectKeys.includes(k)
+                    ? errs
+                    : errs.concat([propLabel + " should contains key " + k]));
+        }, []);
+    };
+}
+exports.objHasKeys = objHasKeys;
+/**
+ * Checks object values by structure of validators
+ */
+function objProps(propValidators) {
+    return function (propName, propLabel, propVal) {
+        if (typeof propVal !== "object") {
+            return [propLabel + " should be object, gets " + (typeof propVal)];
+        }
+        var objectKeys = Object.getOwnPropertyNames(propVal);
+        var objectOwnPropSymbols = Object.getOwnPropertySymbols(propVal);
+        return Object.getOwnPropertyNames(propValidators)
+            .concat(Object.getOwnPropertySymbols(propValidators))
+            .reduce(function (errs, k) {
+            return errs
+                .concat(propValidators[k](k, (0, utils_1.getPropertyLabel)(propVal, k), propVal[k]));
+        }, [])
+            .map(function (err) { return propLabel + " contains object, checks by property: " + err; });
+    };
+}
+exports.objProps = objProps;

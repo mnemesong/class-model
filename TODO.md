@@ -23,22 +23,20 @@
         + date
     + number
         + number
-    - object
-        - objInstance
-        - objNotEmpty
-        - objValidModel
+    + object
+        + objInstance
+        + objValidModel
+        + objHasKeys
     - string
-        - strContains
-        - strISO4217Currency
-        - strRegMatch
-        - strJSON
-        - strXML
-        - strUppercase
-        - strUrl
-        - strUuid
-        - strMaxLength
-        - strMinLength
-        - strNotContains
+        - string
+        - stringLength
+    - boolean
+        - boolean
+    - symbol
+        - symbol
+    - unit
+        - null
+        - undefined
 5. + Make special constructors
     + model
     + arrayOfModels

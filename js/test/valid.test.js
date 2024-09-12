@@ -31,6 +31,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 var mocha_1 = require("mocha");
 var src_1 = require("../src");
@@ -434,6 +435,145 @@ var NumberCheckClass = /** @class */ (function () {
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
             "Property A is not a number"
+        ]);
+    });
+});
+var ObjInstanceCheckClass = /** @class */ (function () {
+    function ObjInstanceCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", valid.objInstance(Map))
+    ], ObjInstanceCheckClass.prototype, "a", void 0);
+    return ObjInstanceCheckClass;
+}());
+(0, mocha_1.describe)("objInstance", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new ObjInstanceCheckClass();
+        obj.a = new Map();
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid 1", function () {
+        var obj = new ObjInstanceCheckClass();
+        obj.a = "sada";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A should be object, gets string"
+        ]);
+    });
+    (0, mocha_1.it)("invalid 2", function () {
+        var obj = new ObjInstanceCheckClass();
+        obj.a = Array();
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A should be instance of Map, gets instance of Array"
+        ]);
+    });
+});
+var ObjValidModelCheckClass = /** @class */ (function () {
+    function ObjValidModelCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", valid.objValidModel())
+    ], ObjValidModelCheckClass.prototype, "a", void 0);
+    return ObjValidModelCheckClass;
+}());
+(0, mocha_1.describe)("objValidModel", function () {
+    (0, mocha_1.it)("valid", function () {
+        var obj = new ObjValidModelCheckClass();
+        obj.a = new NumberCheckClass();
+        obj.a.a = 12;
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid 1", function () {
+        var obj = new ObjValidModelCheckClass();
+        obj.a = "sada";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A should be object, gets string"
+        ]);
+    });
+    (0, mocha_1.it)("invalid 2", function () {
+        var obj = new ObjValidModelCheckClass();
+        obj.a = new NumberCheckClass();
+        obj.a.a = "a";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A should be valid Model, but in it: Property A is not a number"
+        ]);
+    });
+});
+var symB = Symbol("B");
+var ObjHasKeysCheckClass = /** @class */ (function () {
+    function ObjHasKeysCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", valid.objHasKeys(["a", symB]))
+    ], ObjHasKeysCheckClass.prototype, "a", void 0);
+    return ObjHasKeysCheckClass;
+}());
+(0, mocha_1.describe)("objHasKeys", function () {
+    (0, mocha_1.it)("valid", function () {
+        var _a;
+        var obj = new ObjHasKeysCheckClass();
+        obj.a = (_a = { a: 12 }, _a[symB] = "asd", _a);
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid 1", function () {
+        var obj = new ObjHasKeysCheckClass();
+        obj.a = "sada";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A should be object, gets string"
+        ]);
+    });
+    (0, mocha_1.it)("invalid 2", function () {
+        var _a;
+        var obj = new ObjHasKeysCheckClass();
+        obj.a = obj.a = (_a = { a: 12 }, _a[Symbol("B")] = "asd", _a);
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A should contains key Symbol(B)"
+        ]);
+    });
+});
+var ObjPropsCheckClass = /** @class */ (function () {
+    function ObjPropsCheckClass() {
+    }
+    __decorate([
+        (0, src_1.property)("A", valid.objProps((_a = {
+                a: valid.strictEqual(12)
+            },
+            _a[symB] = valid.arrayCount(function (n) { return n === 2; }),
+            _a)))
+    ], ObjPropsCheckClass.prototype, "a", void 0);
+    return ObjPropsCheckClass;
+}());
+(0, mocha_1.describe)("objProps", function () {
+    (0, mocha_1.it)("valid", function () {
+        var _a;
+        var obj = new ObjPropsCheckClass();
+        obj.a = (_a = { a: 12 }, _a[symB] = [0, 0], _a);
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, []);
+    });
+    (0, mocha_1.it)("invalid 1", function () {
+        var obj = new ObjPropsCheckClass();
+        obj.a = "sada";
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A should be object, gets string"
+        ]);
+    });
+    (0, mocha_1.it)("invalid 2", function () {
+        var _a;
+        var obj = new ObjPropsCheckClass();
+        obj.a = obj.a = (_a = { a: 12 }, _a[symB] = [0, 0, 0], _a);
+        var validErrors = (0, src_1.validationErrors)(obj);
+        assert_1.default.deepStrictEqual(validErrors, [
+            "A should contains key Symbol(B)"
         ]);
     });
 });
