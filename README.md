@@ -78,6 +78,9 @@ assert.strictEqual(user.pass, "c412")
 user.password = ""
 const validationErrors2 = classModel.validationErrors(user)
 assert.strictDeepEqual(validationErrors2, ["Password should be equals \"c412\""])
+
+//You also may assert model by them
+classModel.assert(user) //Error: Password should be equals "c412"
 ```
 
 
@@ -153,6 +156,14 @@ export declare function getMaybeMakeModelFn(
     propName: string | symbol
 ): null | MakeProperty;
 
+/**
+ * assert anonimous value by validator
+ */
+export declare function assertByValidator(
+    val: any, 
+    validator: (propName: string | symbol, propLabel: string, propVal: any) => string[]
+): void;
+
 ```
 
 
@@ -224,6 +235,11 @@ export declare function int(
  * Parse data as a boolean
  */
 export declare function boolean(): MakeProperty;
+
+/**
+ * Parse data as a string
+ */
+export declare function string(): MakeProperty;
 
 ```
 
@@ -300,8 +316,8 @@ export declare function filterFn(filterFn: (v: any) => boolean): PropertyValidat
  * Deep strict equals validator
  */
 export declare function oneOf(
-    vals: Array<any>, 
-    printValue?: ValuePrinter | null
+    vals: Array<string | symbol | number | boolean | null | undefined | bigint>, 
+    printValue?: ValuePrinter | null = null
 ): PropertyValidator;
 
 /**

@@ -54,7 +54,7 @@ import * as make from "./make"
 /**
  * Validates object by registered validators and returns error messages array
  */
- export function validationErrors(model: object): Array<string> {
+export function validationErrors(model: object): Array<string> {
     let result = []
     const propMetas = utils.getAllPropertiesMeta(model)
     Object.keys(propMetas).forEach(propName => {
@@ -68,4 +68,16 @@ import * as make from "./make"
         )
     })
     return result
+}
+
+/**
+ * Assert model
+ */
+export function assertModel(
+    model: object
+): void {
+    const errs = validationErrors(model)
+    if(errs.length > 0) {
+        throw new Error(errs[0])
+    }
 }

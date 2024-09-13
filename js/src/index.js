@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validationErrors = exports.loadData = exports.property = exports.make = exports.valid = exports.utils = void 0;
+exports.assertModel = exports.validationErrors = exports.loadData = exports.property = exports.make = exports.valid = exports.utils = void 0;
 exports.utils = __importStar(require("./utils"));
 exports.valid = __importStar(require("./valid"));
 exports.make = __importStar(require("./make"));
@@ -87,3 +87,13 @@ function validationErrors(model) {
     return result;
 }
 exports.validationErrors = validationErrors;
+/**
+ * Assert model
+ */
+function assertModel(model) {
+    var errs = validationErrors(model);
+    if (errs.length > 0) {
+        throw new Error(errs[0]);
+    }
+}
+exports.assertModel = assertModel;

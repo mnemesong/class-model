@@ -69,7 +69,7 @@ function filterFn(filterFn) {
 }
 exports.filterFn = filterFn;
 /**
- * Deep strict equals validator
+ * Check value is one of scalar enumeration
  */
 function oneOf(vals, printValue) {
     if (printValue === void 0) { printValue = null; }
@@ -77,9 +77,7 @@ function oneOf(vals, printValue) {
         return (vals.includes(propVal))
             ? []
             : [propLabel + " should be one of"
-                    + ((printValue === null)
-                        ? "special values"
-                        : (" [" + vals.map(function (v) { return printValue(v); }).join(", ")) + "]")
+                    + " [" + vals.map(function (v) { return JSON.stringify(v); }).join(", ") + "]"
                     + ((printValue === null)
                         ? ""
                         : (", but actual it is " + printValue(propVal)))];

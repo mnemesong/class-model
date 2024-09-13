@@ -21,9 +21,9 @@ export declare function empty(): PropertyValidator;
  */
 export declare function filterFn(filterFn: (v: any) => boolean): PropertyValidator;
 /**
- * Deep strict equals validator
+ * Check value is one of scalar enumeration
  */
-export declare function oneOf(vals: Array<any>, printValue?: ValuePrinter | null): PropertyValidator;
+export declare function oneOf(vals: Array<string | symbol | number | boolean | null | undefined | bigint>, printValue?: ValuePrinter | null): PropertyValidator;
 /**
  * Validator allows anything
  */

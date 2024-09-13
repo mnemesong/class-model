@@ -27,3 +27,7 @@ export declare function int(printData?: ((v: any) => string) | null, roundStrate
  * Parse data as a boolean
  */
 export declare function boolean(): MakeProperty;
+/**
+ * Parse data as a string
+ */
+export declare function string(): MakeProperty;

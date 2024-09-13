@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.boolean = exports.int = exports.float = exports.date = exports.bigInt = exports.modelsArray = exports.model = void 0;
+exports.string = exports.boolean = exports.int = exports.float = exports.date = exports.bigInt = exports.modelsArray = exports.model = void 0;
 var _1 = require(".");
 /**
  * Load model uses getter
@@ -134,3 +134,35 @@ function boolean() {
     };
 }
 exports.boolean = boolean;
+/**
+ * Parse data as a string
+ */
+function string() {
+    return function (data) {
+        var converted = undefined;
+        switch (typeof data) {
+            case "string":
+                converted = data;
+                break;
+            case "number":
+            case "bigint":
+            case "symbol":
+                converted = data.toString();
+                break;
+            case "boolean":
+                converted = !data ? "false" : "true";
+                break;
+            case "undefined":
+                converted = "";
+                break;
+            case "object":
+                if (data !== null) {
+                    throw new Error("Can not convert object to string");
+                }
+                converted = "";
+                break;
+        }
+        return converted;
+    };
+}
+exports.string = string;

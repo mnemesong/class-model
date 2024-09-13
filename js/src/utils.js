@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMaybeMakeModelFn = exports.getPropertyValidator = exports.getPropertyLabel = exports.getProperties = exports.getAllPropertiesMeta = exports.getAllPropertiesLabels = exports.getPropertyMeta = exports.setProperty = exports.__classModelPropertiesKey = void 0;
+exports.assertByValidator = exports.getMaybeMakeModelFn = exports.getPropertyValidator = exports.getPropertyLabel = exports.getProperties = exports.getAllPropertiesMeta = exports.getAllPropertiesLabels = exports.getPropertyMeta = exports.setProperty = exports.__classModelPropertiesKey = void 0;
 exports.__classModelPropertiesKey = "__classModelProperties";
 /**
  * Sets property to model
@@ -104,3 +104,13 @@ function getMaybeMakeModelFn(model, propName) {
         : propMeta.makeModel;
 }
 exports.getMaybeMakeModelFn = getMaybeMakeModelFn;
+/**
+ * assert anonimous value by validator
+ */
+function assertByValidator(val, validator) {
+    var result = validator("", "(anonimous value)", val);
+    if (result.length > 0) {
+        throw new Error(result[0]);
+    }
+}
+exports.assertByValidator = assertByValidator;

@@ -136,3 +136,35 @@ export function float(
         return !!data
     }
 }
+
+/**
+ * Parse data as a string
+ */
+ export function string(): MakeProperty {
+    return function(data) {
+        let converted: string = undefined
+        switch (typeof data) {
+            case "string":
+                converted = data;
+                break;
+            case "number":
+            case "bigint":
+            case "symbol":
+                converted = data.toString()
+                break;
+            case "boolean":
+                converted = !data ? "false" : "true"
+                break;
+            case "undefined":
+                converted = ""
+                break;
+            case "object":
+                if(data !== null) {
+                    throw new Error("Can not convert object to string")
+                }
+                converted = ""
+                break;
+        }
+        return converted
+    }
+}

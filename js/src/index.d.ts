@@ -16,3 +16,7 @@ export declare function loadData(model: object, data: any): boolean;
  * Validates object by registered validators and returns error messages array
  */
 export declare function validationErrors(model: object): Array<string>;
+/**
+ * Assert model
+ */
+export declare function assertModel(model: object): void;

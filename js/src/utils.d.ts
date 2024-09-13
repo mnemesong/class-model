@@ -39,3 +39,7 @@ export declare function getPropertyValidator(model: object, propName: string | s
  * Returns special constructor of property, is it exists
  */
 export declare function getMaybeMakeModelFn(model: object, propName: string | symbol): null | MakeProperty;
+/**
+ * assert anonimous value by validator
+ */
+export declare function assertByValidator(val: any, validator: (propName: string | symbol, propLabel: string, propVal: any) => string[]): void;

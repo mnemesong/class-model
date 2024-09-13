@@ -130,3 +130,16 @@ export function getMaybeMakeModelFn(
         ? null
         : propMeta.makeModel
 }
+
+/**
+ * assert anonimous value by validator
+ */
+export function assertByValidator(
+    val: any,
+    validator: (propName: string|symbol, propLabel: string, propVal: any) => string[]
+): void {
+    const result = validator("", "(anonimous value)", val)
+    if(result.length > 0) {
+        throw new Error(result[0])
+    }
+}

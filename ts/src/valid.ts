@@ -77,19 +77,17 @@ export function required(): PropertyValidator {
 }
 
 /**
- * Deep strict equals validator
+ * Check value is one of scalar enumeration
  */
  export function oneOf(
-    vals: Array<any>,
+    vals: Array<string|symbol|number|boolean|null|undefined|bigint>,
     printValue: ValuePrinter|null = null
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         return (vals.includes(propVal))
             ? []
             : [propLabel + " should be one of"
-                + ((printValue === null) 
-                    ? "special values" 
-                    : (" [" + vals.map(v => printValue(v)).join(", ")) + "]")
+                + " [" + vals.map(v => JSON.stringify(v)).join(", ") + "]"
                 + ((printValue === null) 
                 ? "" 
                 : (", but actual it is " + printValue(propVal)))]
