@@ -103,3 +103,14 @@ var UserAuth = /** @class */ (function () {
         assert.strictEqual((0, utils_1.getPropertyLabel)(user, "name"), "name");
     });
 });
+(0, mocha_1.describe)("toStructure", function () {
+    (0, mocha_1.it)("valid", function () {
+        var user = new UserAuth();
+        user.login = "xad12";
+        user.pass = "c142s";
+        assert.deepStrictEqual((0, src_1.toStructure)(user), {
+            login: "xad12",
+            pass: "c142s"
+        });
+    });
+});

@@ -20,3 +20,7 @@ export declare function validationErrors(model: object): Array<string>;
  * Assert model
  */
 export declare function assertModel(model: object): void;
+/**
+ * Transforms class to structure
+ */
+export declare function toStructure<T extends {}>(model: T): Pick<T, keyof T>;

@@ -81,3 +81,16 @@ export function assertModel(
         throw new Error(errs[0])
     }
 }
+
+/**
+ * Transforms class to structure
+ */
+export function toStructure<T extends {}>(
+    model: T
+): Pick<T, keyof T> {
+    const result = {}
+    utils.getProperties(model).forEach(p => {
+        result[p] = model[p]
+    })
+    return result as Pick<T, keyof T>
+}

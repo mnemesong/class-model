@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.assertModel = exports.validationErrors = exports.loadData = exports.property = exports.make = exports.valid = exports.utils = void 0;
+exports.toStructure = exports.assertModel = exports.validationErrors = exports.loadData = exports.property = exports.make = exports.valid = exports.utils = void 0;
 exports.utils = __importStar(require("./utils"));
 exports.valid = __importStar(require("./valid"));
 exports.make = __importStar(require("./make"));
@@ -97,3 +97,14 @@ function assertModel(model) {
     }
 }
 exports.assertModel = assertModel;
+/**
+ * Transforms class to structure
+ */
+function toStructure(model) {
+    var result = {};
+    utils.getProperties(model).forEach(function (p) {
+        result[p] = model[p];
+    });
+    return result;
+}
+exports.toStructure = toStructure;

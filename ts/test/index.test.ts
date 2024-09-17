@@ -1,7 +1,7 @@
 import { describe, it } from "mocha"
 import * as assert from "assert"
 import { __classModelPropertiesKey, getAllPropertiesLabels, getPropertyLabel } from "../src/utils"
-import { property, loadData, validationErrors } from "../src"
+import { property, loadData, validationErrors, toStructure } from "../src"
 
 function strNotEmpty(prop: string, label: string, val: any) {
     return (val.length > 0)
@@ -75,5 +75,17 @@ describe("labels", () => {
         user.login = "xad12"
         user.pass = "c142s"
         assert.strictEqual(getPropertyLabel(user, "name"), "name")
+    })
+})
+
+describe("toStructure", () => {
+    it("valid", () => {
+        const user = new UserAuth()
+        user.login = "xad12"
+        user.pass = "c142s"
+        assert.deepStrictEqual(toStructure(user), {
+            login: "xad12",
+            pass: "c142s"
+        })
     })
 })
