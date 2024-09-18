@@ -11,7 +11,7 @@ export declare function property(label?: string | null, validator?: PropertyVali
  * Load data from object to model by all registered properties
  * Returns true if loading had been successfull, false else
  */
-export declare function loadData(model: object, data: any): boolean;
+export declare function loadData(model: object, data: any, errPrint?: ((e: any) => void) | null): boolean;
 /**
  * Validates object by registered validators and returns error messages array
  */

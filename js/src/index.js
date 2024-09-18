@@ -44,7 +44,8 @@ exports.property = property;
  * Load data from object to model by all registered properties
  * Returns true if loading had been successfull, false else
  */
-function loadData(model, data) {
+function loadData(model, data, errPrint) {
+    if (errPrint === void 0) { errPrint = null; }
     if (typeof data !== "object") {
         return false;
     }
@@ -66,7 +67,9 @@ function loadData(model, data) {
         return true;
     }
     catch (e) {
-        console.log(e);
+        if (errPrint) {
+            errPrint(e);
+        }
         Object.keys(oldVals).forEach(function (k) {
             model[k] = oldVals[k];
         });
