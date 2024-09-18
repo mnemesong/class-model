@@ -81,7 +81,7 @@ function float(printData) {
                 number = (Number(data));
                 break;
             case "string":
-                parseFloat(data);
+                number = parseFloat(data);
                 break;
         }
         if (isNaN(number)) {

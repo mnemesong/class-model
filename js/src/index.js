@@ -66,6 +66,7 @@ function loadData(model, data) {
         return true;
     }
     catch (e) {
+        console.log(e);
         Object.keys(oldVals).forEach(function (k) {
             model[k] = oldVals[k];
         });

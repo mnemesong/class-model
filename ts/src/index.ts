@@ -23,7 +23,11 @@ import * as make from "./make"
  * Load data from object to model by all registered properties 
  * Returns true if loading had been successfull, false else
  */
- export function loadData(model: object, data: any): boolean {
+ export function loadData(
+    model: object, 
+    data: any, 
+    errPrint: ((e: any) => void)|null = null
+): boolean {
     if(typeof data !== "object") {
         return false
     }
@@ -44,6 +48,9 @@ import * as make from "./make"
         })
         return true
     } catch (e) {
+        if(errPrint) {
+            errPrint(e)
+        }
         Object.keys(oldVals).forEach(k => {
             model[k] = oldVals[k]
         })

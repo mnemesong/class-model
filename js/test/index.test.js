@@ -55,14 +55,68 @@ var UserAuth = /** @class */ (function () {
         assert.strictEqual(Object.keys(user).includes(utils_1.__classModelPropertiesKey), false);
     });
 });
+var SubModel1 = /** @class */ (function () {
+    function SubModel1() {
+    }
+    __decorate([
+        (0, src_1.property)(null, src_1.valid.and([
+            src_1.valid.string(),
+            src_1.valid.required()
+        ]))
+    ], SubModel1.prototype, "sm1a", void 0);
+    return SubModel1;
+}());
+var SubModel2 = /** @class */ (function () {
+    function SubModel2() {
+    }
+    __decorate([
+        (0, src_1.property)(null, src_1.valid.number(), src_1.make.float())
+    ], SubModel2.prototype, "sm2a", void 0);
+    __decorate([
+        (0, src_1.property)(null, src_1.valid.and([
+            src_1.valid.objInstance(SubModel1),
+            src_1.valid.objValidModel()
+        ]), src_1.make.model(function () { return new SubModel1(); }))
+    ], SubModel2.prototype, "sm2b", void 0);
+    return SubModel2;
+}());
+var Model3 = /** @class */ (function () {
+    function Model3() {
+    }
+    __decorate([
+        (0, src_1.property)(null, src_1.valid.arrayOf(src_1.valid.and([
+            src_1.valid.objInstance(SubModel2),
+            src_1.valid.objValidModel()
+        ])), src_1.make.modelsArray(function () { return new SubModel2; }))
+    ], Model3.prototype, "m1", void 0);
+    __decorate([
+        (0, src_1.property)(null, src_1.valid.required(), src_1.make.bigInt())
+    ], Model3.prototype, "m2", void 0);
+    return Model3;
+}());
 (0, mocha_1.describe)("loading", function () {
-    (0, mocha_1.it)("valid", function () {
+    (0, mocha_1.it)("valid 1", function () {
         var user = new UserAuth();
         var loadResult = (0, src_1.loadData)(user, { login: "asdsa", pass: "c412", koka: 12 });
         assert.strictEqual(loadResult, true);
         assert.strictEqual(user.login, "asdsa");
         assert.strictEqual(user.pass, "c412");
         assert.strictEqual(user["koka"], undefined);
+    });
+    (0, mocha_1.it)("valid 2", function () {
+        var m3 = new Model3();
+        var loadResult = (0, src_1.loadData)(m3, {
+            m2: BigInt(14212),
+            m1: [
+                { sm2a: "12325.123", sm2b: { sm1a: "aboba" } },
+                { sm2a: "-0.5264", sm2b: { sm1a: "11" } },
+            ]
+        });
+        (0, src_1.assertModel)(m3);
+        assert.strictEqual(loadResult, true);
+        assert.strictEqual(m3.m2, BigInt(14212));
+        assert.strictEqual(m3.m1[0].sm2a, 12325.123);
+        assert.strictEqual(m3.m1[1].sm2b.sm1a, "11");
     });
     (0, mocha_1.it)("invalid", function () {
         var user = new UserAuth();
