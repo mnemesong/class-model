@@ -24,6 +24,9 @@ exports.model = model;
  */
 function modelsArray(getModel) {
     return function (data) {
+        if (!data) {
+            return [];
+        }
         if (!Array.isArray(data)) {
             throw new Error("try to load models array by not array of data");
         }

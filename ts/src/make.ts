@@ -24,6 +24,9 @@ export function model(getModel: () => object): MakeProperty {
  */
 export function modelsArray(getModel: () => object): MakeProperty {
     return function(data) {
+        if(!data) {
+            return []
+        }
         if(!Array.isArray(data)) {
             throw new Error("try to load models array by not array of data")
         }
