@@ -168,3 +168,18 @@ export function float(
         return converted
     }
 }
+
+/**
+ * Parse data as array
+ */
+ export function arrayOf(make: MakeProperty|null = null): MakeProperty {
+    return function(data) {
+        if(!data) {
+            return []
+        }
+        const arr = Array.isArray(data) ? data : [data]
+        return !make
+            ? arr
+            : arr.map(v => make(v))
+    }
+}

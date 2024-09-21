@@ -31,3 +31,7 @@ export declare function boolean(): MakeProperty;
  * Parse data as a string
  */
 export declare function string(): MakeProperty;
+/**
+ * Parse data as array
+ */
+export declare function arrayOf(make?: MakeProperty | null): MakeProperty;

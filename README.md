@@ -241,6 +241,11 @@ export declare function boolean(): MakeProperty;
  */
 export declare function string(): MakeProperty;
 
+/**
+ * Parse data as array
+ */
+ export function arrayOf(make: MakeProperty|null = null): MakeProperty
+
 ```
 
 
@@ -475,6 +480,11 @@ export declare function func(
  * (You may use it with `validator` package)
  */
 export declare function lambda(valid: (a: any) => boolean | string[]): PropertyValidator;
+
+/**
+ * Modify any validator. Allows falsable values
+ */
+export function maybe(valid: PropertyValidator): PropertyValidator
 
 ```
 

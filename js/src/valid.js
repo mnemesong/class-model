@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lambda = exports.func = exports.isUndefined = exports.isNull = exports.symbol = exports.boolean = exports.stringUuid = exports.stringRegMatch = exports.stringLength = exports.string = exports.objProps = exports.objHasKeys = exports.objValidModel = exports.objInstance = exports.number = exports.date = exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.filterFn = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
+exports.maybe = exports.lambda = exports.func = exports.isUndefined = exports.isNull = exports.symbol = exports.boolean = exports.stringUuid = exports.stringRegMatch = exports.stringLength = exports.string = exports.objProps = exports.objHasKeys = exports.objValidModel = exports.objInstance = exports.number = exports.date = exports.not = exports.or = exports.and = exports.arrayTuple = exports.arrayCount = exports.arrayDeepStrictUnique = exports.arrayOf = exports.scalar = exports.never = exports.any = exports.oneOf = exports.filterFn = exports.empty = exports.required = exports.strictDeepEqual = exports.strictEqual = void 0;
 var util_1 = require("util");
 var _1 = require(".");
 var utils_1 = require("./utils");
@@ -566,3 +566,15 @@ function lambda(valid) {
     };
 }
 exports.lambda = lambda;
+/**
+ * Modify any validator. Allows falsable values
+ */
+function maybe(valid) {
+    return function (propName, propLabel, propVal) {
+        if (!propVal) {
+            return [];
+        }
+        return valid(propName, propLabel, propVal);
+    };
+}
+exports.maybe = maybe;

@@ -601,3 +601,15 @@ export function lambda(
         return result
     }
 }
+
+/**
+ * Modify any validator. Allows falsable values
+ */
+export function maybe(valid: PropertyValidator): PropertyValidator {
+    return function(propName, propLabel, propVal) {
+        if(!propVal) {
+            return []
+        }
+        return valid(propName, propLabel, propVal)
+    }
+}

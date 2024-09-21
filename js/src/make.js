@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.string = exports.boolean = exports.int = exports.float = exports.date = exports.bigInt = exports.modelsArray = exports.model = void 0;
+exports.arrayOf = exports.string = exports.boolean = exports.int = exports.float = exports.date = exports.bigInt = exports.modelsArray = exports.model = void 0;
 var _1 = require(".");
 /**
  * Load model uses getter
@@ -166,3 +166,19 @@ function string() {
     };
 }
 exports.string = string;
+/**
+ * Parse data as array
+ */
+function arrayOf(make) {
+    if (make === void 0) { make = null; }
+    return function (data) {
+        if (!data) {
+            return [];
+        }
+        var arr = Array.isArray(data) ? data : [data];
+        return !make
+            ? arr
+            : arr.map(function (v) { return make(v); });
+    };
+}
+exports.arrayOf = arrayOf;

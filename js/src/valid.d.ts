@@ -129,3 +129,7 @@ export declare function func(valid?: ((s: Function) => string[] | boolean) | nul
  * Validate value by lambda
  */
 export declare function lambda(valid: (a: any) => boolean | string[]): PropertyValidator;
+/**
+ * Modify any validator. Allows falsable values
+ */
+export declare function maybe(valid: PropertyValidator): PropertyValidator;
