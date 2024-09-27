@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toStructure = exports.assertModel = exports.validationErrors = exports.loadData = exports.property = exports.make = exports.valid = exports.utils = void 0;
+exports.loadValidAssert = exports.toStructure = exports.assertModel = exports.validationErrors = exports.loadData = exports.property = exports.make = exports.valid = exports.utils = void 0;
 exports.utils = __importStar(require("./utils"));
 exports.valid = __importStar(require("./valid"));
 exports.make = __importStar(require("./make"));
@@ -112,3 +112,18 @@ function toStructure(model) {
     return result;
 }
 exports.toStructure = toStructure;
+/**
+ * Creates model, loads and validate it
+ * Throws error on failure, returns loaded model instance in success
+ */
+function loadValidAssert(getModel, data) {
+    var errs = [];
+    var model = getModel();
+    loadData(model, data, function (e) { errs.push(e); });
+    if (errs.length > 0) {
+        throw errs[0];
+    }
+    assertModel(model);
+    return model;
+}
+exports.loadValidAssert = loadValidAssert;

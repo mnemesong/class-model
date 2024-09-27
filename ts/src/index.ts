@@ -101,3 +101,18 @@ export function toStructure<T extends {}>(
     })
     return result as Pick<T, keyof T>
 }
+
+/**
+ * Creates model, loads and validate it
+ * Throws error on failure, returns loaded model instance in success 
+ */
+export function loadValidAssert<T extends {}>(getModel: () => T, data: any): T {
+    const errs = [];
+    const model = getModel()
+    loadData(model, data, (e) => {errs.push(e)})
+    if(errs.length > 0) {
+        throw errs[0]
+    }
+    assertModel(model)
+    return model
+}

@@ -24,3 +24,8 @@ export declare function assertModel(model: object): void;
  * Transforms class to structure
  */
 export declare function toStructure<T extends {}>(model: T): Pick<T, keyof T>;
+/**
+ * Creates model, loads and validate it
+ * Throws error on failure, returns loaded model instance in success
+ */
+export declare function loadValidAssert<T extends {}>(getModel: () => T, data: any): T;
