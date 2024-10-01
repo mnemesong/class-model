@@ -29,3 +29,7 @@ export declare function toStructure<T extends {}>(model: T): Pick<T, keyof T>;
  * Throws error on failure, returns loaded model instance in success
  */
 export declare function loadValidAssert<T extends {}>(getModel: () => T, data: any): T;
+/**
+ * Assert data is array, loads and validates it as array of models
+ */
+export declare function loadValidAssertArray<T extends {}>(getModel: () => T, data: any): T[];

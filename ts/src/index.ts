@@ -116,3 +116,13 @@ export function loadValidAssert<T extends {}>(getModel: () => T, data: any): T {
     assertModel(model)
     return model
 }
+
+/**
+ * Assert data is array, loads and validates it as array of models
+ */
+export function loadValidAssertArray<T extends {}>(getModel: () => T, data: any): T[] {
+    if(!Array.isArray(data)) {
+        throw new Error("Await data is array. Gets " + (typeof data))
+    }    
+    return data.map(v => loadValidAssert(getModel, v))
+}

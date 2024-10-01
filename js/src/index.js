@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loadValidAssert = exports.toStructure = exports.assertModel = exports.validationErrors = exports.loadData = exports.property = exports.make = exports.valid = exports.utils = void 0;
+exports.loadValidAssertArray = exports.loadValidAssert = exports.toStructure = exports.assertModel = exports.validationErrors = exports.loadData = exports.property = exports.make = exports.valid = exports.utils = void 0;
 exports.utils = __importStar(require("./utils"));
 exports.valid = __importStar(require("./valid"));
 exports.make = __importStar(require("./make"));
@@ -127,3 +127,13 @@ function loadValidAssert(getModel, data) {
     return model;
 }
 exports.loadValidAssert = loadValidAssert;
+/**
+ * Assert data is array, loads and validates it as array of models
+ */
+function loadValidAssertArray(getModel, data) {
+    if (!Array.isArray(data)) {
+        throw new Error("Await data is array. Gets " + (typeof data));
+    }
+    return data.map(function (v) { return loadValidAssert(getModel, v); });
+}
+exports.loadValidAssertArray = loadValidAssertArray;
