@@ -406,7 +406,7 @@ export declare function objInstance(construct?: Function | null): PropertyValida
 /**
  * Checks object is valid as a Model
  */
-export declare function objValidModel(): PropertyValidator;
+export declare function objValidModel(construct: Function|null = null): PropertyValidator;
 
 /**
  * Checks object has keys

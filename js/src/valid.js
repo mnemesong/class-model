@@ -333,13 +333,14 @@ exports.objInstance = objInstance;
 /**
  * Checks object is valid as a Model
  */
-function objValidModel() {
+function objValidModel(construct) {
+    if (construct === void 0) { construct = null; }
     return function (propName, propLabel, propVal) {
-        if (typeof propVal !== "object") {
-            return [propLabel + " should be object, gets " + (typeof propVal)];
-        }
-        return (0, _1.validationErrors)(propVal)
-            .map(function (err) { return propLabel + " should be valid Model, but in it: " + err; });
+        var instanceErrors = objInstance(construct)(propName, propLabel, propVal);
+        return (instanceErrors.length === 0)
+            ? (0, _1.validationErrors)(propVal)
+                .map(function (err) { return propLabel + " should be valid Model, but in it: " + err; })
+            : instanceErrors;
     };
 }
 exports.objValidModel = objValidModel;

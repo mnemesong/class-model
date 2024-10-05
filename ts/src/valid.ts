@@ -356,13 +356,13 @@ export function objInstance(
 /**
  * Checks object is valid as a Model
  */
- export function objValidModel(): PropertyValidator {
+ export function objValidModel(construct: Function|null = null): PropertyValidator {
     return function(propName, propLabel, propVal) {
-        if(typeof propVal !== "object") {
-            return [propLabel + " should be object, gets " + (typeof propVal)]
-        }
-        return validationErrors(propVal)
-            .map(err => propLabel + " should be valid Model, but in it: " + err)
+        const instanceErrors = objInstance(construct)(propName, propLabel, propVal)
+        return (instanceErrors.length === 0)
+            ? validationErrors(propVal)
+                .map(err => propLabel + " should be valid Model, but in it: " + err)
+            : instanceErrors
     }
 }
 
