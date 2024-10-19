@@ -56,12 +56,7 @@ function loadData(model, data, errPrint) {
         props.forEach(function (p) {
             oldVals[p] = model[p];
             model[p] = !!meta_1[p].makeModel
-                ? (function () {
-                    var maked = meta_1[p].makeModel(data[p]);
-                    return (maked === false)
-                        ? data[p]
-                        : maked;
-                })()
+                ? meta_1[p].makeModel(data[p])
                 : data[p];
         });
         return true;

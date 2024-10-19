@@ -1,6 +1,6 @@
 {
   "name": "class-model",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Class scheme definition by decorator with type-validators and loaders",
   "main": "js/src/index.js",
   "scripts": {

@@ -1,7 +1,7 @@
 import { describe, it } from "mocha"
 import * as assert from "assert"
 import { __classModelPropertiesKey, getAllPropertiesLabels, getPropertyLabel } from "../src/utils"
-import { property, loadData, validationErrors, toStructure, valid, make, assertModel } from "../src"
+import { property, loadData, validationErrors, toStructure, valid, make, assertModel, loadValidAssertArray } from "../src"
 
 function strNotEmpty(prop: string, label: string, val: any) {
     return (val.length > 0)
@@ -147,5 +147,29 @@ describe("toStructure", () => {
             login: "xad12",
             pass: "c142s"
         })
+    })
+})
+
+class SimpleUser {
+    @property(null,
+        valid.boolean(),
+        make.boolean()
+    )
+    public isPremium: boolean
+}
+
+describe("toloadValidAssertArray", () => {
+    it("valid", () => {
+        const simpleUsersData = [
+            {isPremium: false},
+            {isPremium: 0},
+            {isPremium: 1},
+            {isPremium: null},
+        ]
+        const users = loadValidAssertArray(() => new SimpleUser(), simpleUsersData)
+        assert.strictEqual(users[0].isPremium, false)
+        assert.strictEqual(users[1].isPremium, false)
+        assert.strictEqual(users[2].isPremium, true)
+        assert.strictEqual(users[3].isPremium, false)
     })
 })

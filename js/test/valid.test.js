@@ -387,7 +387,7 @@ var DateCheckClass = /** @class */ (function () {
         obj.a = "a";
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
-            "Property A is not a Date"
+            "Property A is not a Date. Its: string"
         ]);
     });
     (0, mocha_1.it)("invalid 2", function () {
@@ -395,7 +395,7 @@ var DateCheckClass = /** @class */ (function () {
         obj.a = "2022-11-11";
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
-            "Property A is not a Date"
+            "Property A is not a Date. Its: string"
         ]);
     });
     (0, mocha_1.it)("invalid 3", function () {
@@ -435,7 +435,7 @@ var NumberCheckClass = /** @class */ (function () {
         obj.a = "A";
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
-            "Property A is not a number"
+            "Property A is not a number. Its: string"
         ]);
     });
 });
@@ -501,7 +501,7 @@ var ObjValidModelCheckClass = /** @class */ (function () {
         obj.a.a = "a";
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
-            "A should be valid Model, but in it: Property A is not a number"
+            "A should be valid Model, but in it: Property A is not a number. Its: string"
         ]);
     });
 });
@@ -606,7 +606,7 @@ var StringCheckClass = /** @class */ (function () {
         obj.a = 12;
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
-            "Property A is not a string"
+            "Property A is not a string. Its: number"
         ]);
     });
 });
@@ -638,7 +638,7 @@ var StringLenCheckClass = /** @class */ (function () {
         obj.a = {};
         var validErrors = (0, src_1.validationErrors)(obj);
         assert_1.default.deepStrictEqual(validErrors, [
-            "Property A is not a string"
+            "Property A is not a string. Its: object"
         ]);
     });
 });

@@ -168,3 +168,26 @@ var Model3 = /** @class */ (function () {
         });
     });
 });
+var SimpleUser = /** @class */ (function () {
+    function SimpleUser() {
+    }
+    __decorate([
+        (0, src_1.property)(null, src_1.valid.boolean(), src_1.make.boolean())
+    ], SimpleUser.prototype, "isPremium", void 0);
+    return SimpleUser;
+}());
+(0, mocha_1.describe)("toloadValidAssertArray", function () {
+    (0, mocha_1.it)("valid", function () {
+        var simpleUsersData = [
+            { isPremium: false },
+            { isPremium: 0 },
+            { isPremium: 1 },
+            { isPremium: null },
+        ];
+        var users = (0, src_1.loadValidAssertArray)(function () { return new SimpleUser(); }, simpleUsersData);
+        assert.strictEqual(users[0].isPremium, false);
+        assert.strictEqual(users[1].isPremium, false);
+        assert.strictEqual(users[2].isPremium, true);
+        assert.strictEqual(users[3].isPremium, false);
+    });
+});

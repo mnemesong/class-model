@@ -344,7 +344,7 @@ describe("date", () => {
         obj.a = "a"
         const validErrors = validationErrors(obj)
         assert.deepStrictEqual(validErrors, [
-            "Property A is not a Date"
+            "Property A is not a Date. Its: string"
         ])
     })
 
@@ -353,7 +353,7 @@ describe("date", () => {
         obj.a = "2022-11-11"
         const validErrors = validationErrors(obj)
         assert.deepStrictEqual(validErrors, [
-            "Property A is not a Date"
+            "Property A is not a Date. Its: string"
         ])
     })
 
@@ -396,7 +396,7 @@ describe("number", () => {
         obj.a = "A"
         const validErrors = validationErrors(obj)
         assert.deepStrictEqual(validErrors, [
-            "Property A is not a number"
+            "Property A is not a number. Its: string"
         ])
     })
 })
@@ -462,7 +462,7 @@ describe("objValidModel", () => {
         obj.a.a = "a"
         const validErrors = validationErrors(obj)
         assert.deepStrictEqual(validErrors, [
-            "A should be valid Model, but in it: Property A is not a number"
+            "A should be valid Model, but in it: Property A is not a number. Its: string"
         ])
     })
 })
@@ -564,7 +564,7 @@ describe("string", () => {
         obj.a = 12
         const validErrors = validationErrors(obj)
         assert.deepStrictEqual(validErrors, [
-            "Property A is not a string"
+            "Property A is not a string. Its: number"
         ])
     })
 })
@@ -598,7 +598,7 @@ describe("stringLength", () => {
         obj.a = {}
         const validErrors = validationErrors(obj)
         assert.deepStrictEqual(validErrors, [
-            "Property A is not a string"
+            "Property A is not a string. Its: object"
         ])
     })
 })

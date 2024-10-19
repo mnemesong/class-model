@@ -38,12 +38,7 @@ import * as make from "./make"
         props.forEach(p => {
             oldVals[p] = model[p]
             model[p] = !!meta[p].makeModel
-                ? (() => {
-                    const maked = meta[p].makeModel(data[p])
-                    return (maked === false)
-                        ? data[p]
-                        : maked
-                })()
+                ? meta[p].makeModel(data[p])
                 : data[p]
         })
         return true

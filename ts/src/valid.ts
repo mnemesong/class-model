@@ -292,7 +292,8 @@ export function date(
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(!(propVal instanceof Date)) {
-            return ["Property " + propLabel + " is not a Date"];
+            return ["Property " + propLabel + " is not a Date."
+                + " Its: " + (typeof propVal)];
         }
         if(!valid) {
             return [];
@@ -315,7 +316,8 @@ export function number(
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(typeof propVal !== "number") {
-            return ["Property " + propLabel + " is not a number"];
+            return ["Property " + propLabel + " is not a number."
+                + " Its: " + (typeof propVal)];
         }
         if(!valid) {
             return [];
@@ -418,7 +420,8 @@ export function objInstance(
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(typeof propVal !== "string") {
-            return ["Property " + propLabel + " is not a string"];
+            return ["Property " + propLabel + " is not a string."
+                + " Its: " + (typeof propVal)];
         }
         if(!valid) {
             return [];
@@ -442,7 +445,8 @@ export function objInstance(
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(typeof propVal !== "string") {
-            return ["Property " + propLabel + " is not a string"];
+            return ["Property " + propLabel + " is not a string."
+                + " Its: " + (typeof propVal)];
         }
         if(!valid) {
             return [];
@@ -466,7 +470,8 @@ export function objInstance(
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(typeof propVal !== "string") {
-            return ["Property " + propLabel + " is not a string"];
+            return ["Property " + propLabel + " is not a string."
+                + " Its: " + (typeof propVal)];
         }
         const result = propVal.match(regex)
         if(!!result && (result.length > 0)) {
@@ -497,7 +502,8 @@ export function boolean(
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(typeof propVal !== "boolean") {
-            return ["Property " + propLabel + " is not a boolean"];
+            return ["Property " + propLabel + " is not a boolean." 
+                + " Its: " + (typeof propVal)];
         }
         if(!valid) {
             return [];
@@ -521,7 +527,8 @@ export function symbol(
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(typeof propVal !== "symbol") {
-            return ["Property " + propLabel + " is not a symbol"];
+            return ["Property " + propLabel + " is not a symbol."
+                + " Its: " + (typeof propVal)];
         }
         if(!valid) {
             return [];
@@ -543,7 +550,8 @@ export function symbol(
 export function isNull(): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(propVal !== null) {
-            return ["Property " + propLabel + " is not a null"];
+            return ["Property " + propLabel + " is not a null."
+                + " Its: " + (typeof propVal)];
         }
         return []
     }
@@ -555,7 +563,8 @@ export function isNull(): PropertyValidator {
 export function isUndefined(): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(propVal !== undefined) {
-            return ["Property " + propLabel + " is not a undefined"];
+            return ["Property " + propLabel + " is not a undefined."
+                + " Its: " + (typeof propVal)];
         }
         return []
     }
@@ -569,7 +578,8 @@ export function func(
 ): PropertyValidator {
     return function(propName, propLabel, propVal) {
         if(typeof propVal !== "function") {
-            return ["Property " + propLabel + " is not a function"];
+            return ["Property " + propLabel + " is not a function."
+                + " Its: " + (typeof propVal)];
         }
         if(!valid) {
             return [];
