@@ -1,6 +1,8 @@
 # class-model
 Class scheme definition by decorator with type-validators and loaders
 
+## Project had change repository!
+Actual repository is https://gitflic.ru/project/pantagruel74/class-model
 
 ## Example of usage
 ```typescript
